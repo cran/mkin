@@ -1,4 +1,4 @@
-# $Id: runit.mkinfit.R 59 2010-07-28 12:29:15Z jranke $
+# $Id: runit.mkinfit.R 68 2010-09-09 22:40:04Z jranke $
 
 # Copyright (C) 2010 Johannes Ranke
 # Contact: mkin-devel@lists.berlios.de
@@ -37,16 +37,16 @@ test.mkinmod.schaefer07_complex_example <- function()
   r$mkin <- c(
     k_parent,
     s$distimes["parent", "DT50"],
-    k_parent_A1/k_parent,
+    s$ff["parent_A1"],
     sum(k_A1_sink, k_A1_A2),
     s$distimes["A1", "DT50"],
-    k_parent_B1/k_parent,
+    s$ff["parent_B1"],
     k_B1_sink,
     s$distimes["B1", "DT50"],
-    k_parent_C1/k_parent,
+    s$ff["parent_C1"],
     k_C1_sink,
     s$distimes["C1", "DT50"],
-    k_A1_A2/(k_A1_A2 + k_A1_sink),
+    s$ff["A1_A2"],
     k_A2_sink,
     s$distimes["A2", "DT50"])
   r$means <- (r$KinGUI + r$ModelMaker)/2

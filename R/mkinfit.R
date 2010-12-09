@@ -1,7 +1,10 @@
-# $Id: mkinfit.R 59 2010-07-28 12:29:15Z jranke $
+# $Id: mkinfit.R 87 2010-12-09 07:31:59Z jranke $
 
 # Copyright (C) 2010 Johannes Ranke
 # Contact: mkin-devel@lists.berlios.de
+# The summary function is an adapted and extended version of summary.modFit
+# from the FME package, v 1.1 by Soetart and Petzoldt, which was in turn
+# inspired by summary.nls.lm
 
 # This file is part of the R package mkin
 
@@ -24,8 +27,10 @@ mkinfit <- function(mkinmod, observed,
   lower = 0, upper = Inf,
   fixed_parms = NULL,
   fixed_initials = names(mkinmod$diffs)[-1],
+  eigen = TRUE,
   plot = FALSE, quiet = FALSE,
   err = NULL, weight = "none", scaleVar = FALSE,
+  atol = 1e-6,
   ...)
 {
   mod_vars <- names(mkinmod$diffs)
@@ -36,18 +41,6 @@ mkinfit <- function(mkinmod, observed,
 
   # Name the parameters if they are not named yet
   if(is.null(names(parms.ini))) names(parms.ini) <- mkinmod$parms
-  # Create a function calculating the differentials specified by the model
-  mkindiff <- function(t, state, parms) {
-    time <- t
-    diffs <- vector()
-    for (box in mod_vars)
-    {
-      diffname <- paste("d", box, sep="_")      
-      diffs[diffname] <- with(as.list(c(time,state, parms)),
-        eval(parse(text=mkinmod$diffs[[box]])))
-    }
-    return(list(c(diffs)))
-  } 
 
   # Name the inital parameter values if they are not named yet
   if(is.null(names(state.ini))) names(state.ini) <- mod_vars
@@ -65,6 +58,32 @@ mkinfit <- function(mkinmod, observed,
       names(state.ini.optim) <- paste(names(state.ini.optim), "0", sep="_")
   }
 
+  # Decide if the solution of the model can be based on a simple analytical
+  # formula, the spectral decomposition of the matrix (fundamental system)
+  # or a numeric ode solver from the deSolve package
+  if (length(mkinmod$map) == 1) {
+    solution = "analytical"
+  } else {
+    if (is.matrix(mkinmod$coefmat) & eigen) solution = "eigen"
+    else solution = "deSolve"
+  }
+
+  # Create a function calculating the differentials specified by the model
+  # if necessary
+  if(solution == "deSolve") {
+    mkindiff <- function(t, state, parms) {
+      time <- t
+      diffs <- vector()
+      for (box in mod_vars)
+      {
+        diffname <- paste("d", box, sep="_")      
+        diffs[diffname] <- with(as.list(c(time,state, parms)),
+          eval(parse(text=mkinmod$diffs[[box]])))
+      }
+      return(list(c(diffs)))
+    } 
+  }
+
   cost.old <- 1e100
   calls <- 0
   out_predicted <- NA
@@ -80,19 +99,67 @@ mkinfit <- function(mkinmod, observed,
     odeparms <- c(P[(length(state.ini.optim) + 1):length(P)], parms.fixed)
 
     outtimes = unique(observed$time)
+    evalparse <- function(string)
+    {
+      eval(parse(text=string), as.list(c(odeparms, odeini)))
+    }
 
-    # Solve the ode
-    out <- ode(
-      y = odeini,
-      times = outtimes,
-      func = mkindiff, 
-      parms = odeparms)
-
+    # Solve the system
+    if (solution == "analytical") {
+      parent.type = names(mkinmod$map[[1]])[1]  
+      parent.name = names(mkinmod$diffs)[[1]]
+      o <- switch(parent.type,
+        SFO = SFO.solution(outtimes, 
+            evalparse(parent.name),
+            evalparse(paste("k", parent.name, "sink", sep="_"))),
+        FOMC = FOMC.solution(outtimes,
+            evalparse(parent.name),
+            evalparse("alpha"), evalparse("beta")),
+        DFOP = DFOP.solution(outtimes,
+            evalparse(parent.name),
+            evalparse("k1"), evalparse("k2"),
+            evalparse("g")),
+        HS = HS.solution(outtimes,
+            evalparse(parent.name),
+            evalparse("k1"), evalparse("k2"),
+            evalparse("tb")),
+        SFORB = SFORB.solution(outtimes,
+            evalparse(parent.name),
+            evalparse(paste("k", parent.name, "bound", sep="_")),
+            evalparse(paste("k", sub("free", "bound", parent.name), "free", sep="_")),
+            evalparse(paste("k", parent.name, "sink", sep="_")))
+      )
+      out <- cbind(outtimes, o)
+      dimnames(out) <- list(outtimes, c("time", sub("_free", "", parent.name)))
+    }
+    if (solution == "eigen") {
+      coefmat.num <- matrix(sapply(as.vector(mkinmod$coefmat), evalparse), 
+        nrow = length(mod_vars))
+      e <- eigen(coefmat.num)
+      c <- solve(e$vectors, odeini)
+      f.out <- function(t) {
+        e$vectors %*% diag(exp(e$values * t), nrow=length(mod_vars)) %*% c
+      }
+      o <- matrix(mapply(f.out, outtimes), 
+        nrow = length(mod_vars), ncol = length(outtimes))
+      dimnames(o) <- list(mod_vars, outtimes)
+      out <- cbind(time = outtimes, t(o))
+    } 
+    if (solution == "deSolve")  
+    {
+      out <- ode(
+        y = odeini,
+        times = outtimes,
+        func = mkindiff, 
+        parms = odeparms,
+        atol = atol
+      )
+    }
   
     # Output transformation for models with unobserved compartments like SFORB
     out_transformed <- data.frame(time = out[,"time"])
     for (var in names(mkinmod$map)) {
-      if(length(mkinmod$map[[var]]) == 1) {
+      if((length(mkinmod$map[[var]]) == 1) || solution == "analytical") {
         out_transformed[var] <- out[, var]
       } else {
         out_transformed[var] <- rowSums(out[, mkinmod$map[[var]]])
@@ -110,19 +177,53 @@ mkinfit <- function(mkinmod, observed,
       # Plot the data and current model output if requested
       if(plot) {
         outtimes_plot = seq(min(observed$time), max(observed$time), length.out=100)
-        out_plot <- ode(
-          y = odeini,
-          times = outtimes_plot,
-          func = mkindiff, 
-          parms = odeparms)
+        if (solution == "analytical") {
+          o_plot <- switch(parent.type,
+            SFO = SFO.solution(outtimes_plot, 
+                evalparse(parent.name),
+                evalparse(paste("k", parent.name, "sink", sep="_"))),
+            FOMC = FOMC.solution(outtimes_plot,
+                evalparse(parent.name),
+                evalparse("alpha"), evalparse("beta")),
+            DFOP = DFOP.solution(outtimes_plot,
+                evalparse(parent.name),
+                evalparse("k1"), evalparse("k2"),
+                evalparse("g")),
+            HS = HS.solution(outtimes_plot,
+                evalparse(parent.name),
+                evalparse("k1"), evalparse("k2"),
+                evalparse("tb")),
+            SFORB = SFORB.solution(outtimes_plot,
+                evalparse(parent.name),
+                evalparse(paste("k", parent.name, "bound", sep="_")),
+                evalparse(paste("k", sub("free", "bound", parent.name), "free", sep="_")),
+                evalparse(paste("k", parent.name, "sink", sep="_")))
+          )
+          out_plot <- cbind(outtimes_plot, o_plot)
+          dimnames(out_plot) <- list(outtimes_plot, c("time", sub("_free", "", parent.name)))
+        }
+        if(solution == "eigen") {
+          o_plot <- matrix(mapply(f.out, outtimes_plot), 
+            nrow = length(mod_vars), ncol = length(outtimes_plot))
+          dimnames(o_plot) <- list(mod_vars, outtimes_plot)
+          out_plot <- cbind(time = outtimes_plot, t(o_plot))
+        } 
+        if (solution == "deSolve") {
+          out_plot <- ode(
+            y = odeini,
+            times = outtimes_plot,
+            func = mkindiff, 
+            parms = odeparms)
+        }
         out_transformed_plot <- data.frame(time = out_plot[,"time"])
         for (var in names(mkinmod$map)) {
-          if(length(mkinmod$map[[var]]) == 1) {
+          if((length(mkinmod$map[[var]]) == 1) || solution == "analytical") {
             out_transformed_plot[var] <- out_plot[, var]
           } else {
             out_transformed_plot[var] <- rowSums(out_plot[, mkinmod$map[[var]]])
           }
         }    
+        out_transformed_plot <<- out_transformed_plot
 
         plot(0, type="n", 
           xlim = range(observed$time), ylim = range(observed$value, na.rm=TRUE),
@@ -144,8 +245,17 @@ mkinfit <- function(mkinmod, observed,
   }
   fit <- modFit(cost, c(state.ini.optim, parms.optim), lower = lower, upper = upper, ...)
 
-  # We need the function for plotting
-  fit$mkindiff <- mkindiff
+  # We need to return some more data for summary and plotting
+  fit$solution <- solution
+  if (solution == "eigen") {
+    fit$coefmat <- mkinmod$coefmat
+  } 
+  if (solution == "deSolve") {
+    fit$mkindiff <- mkindiff
+  }
+  if (plot == TRUE) {
+    fit$out_transformed_plot = out_transformed_plot
+  }
 
   # We also need various other information for summary and plotting
   fit$map <- mkinmod$map
@@ -181,6 +291,10 @@ mkinfit <- function(mkinmod, observed,
     n.optim <- n.k.optim + n.initials.optim
     if ("alpha" %in% names(parms.optim)) n.optim <- n.optim + 1
     if ("beta" %in% names(parms.optim)) n.optim <- n.optim + 1
+    if ("k1" %in% names(parms.optim)) n.optim <- n.optim + 1
+    if ("k2" %in% names(parms.optim)) n.optim <- n.optim + 1
+    if ("g" %in% names(parms.optim)) n.optim <- n.optim + 1
+    if ("tb" %in% names(parms.optim)) n.optim <- n.optim + 1
     errmin.tmp <- mkinerrmin(errdata.var, n.optim)
     errmin[obs_var, c("err.min", "n.optim", "df")] <- errmin.tmp
   }
@@ -191,59 +305,95 @@ mkinfit <- function(mkinmod, observed,
   fit$distimes <- data.frame(DT50 = rep(NA, length(obs_vars)), DT90 = rep(NA, length(obs_vars)), 
     row.names = obs_vars)
   fit$ff <- vector()
+  fit$SFORB <- vector()
   for (obs_var in obs_vars) {
-      type = names(mkinmod$map[[obs_var]])[1]  
-      if (type == "SFO") {
-        k_names = grep(paste("k", obs_var, sep="_"), names(parms.all), value=TRUE)
-        k_tot = sum(parms.all[k_names])
-        DT50 = log(2)/k_tot
-        DT90 = log(10)/k_tot
-        for (k_name in k_names)
-        {
-          fit$ff[[sub("k_", "", k_name)]] = parms.all[[k_name]] / k_tot
-        }
+    type = names(mkinmod$map[[obs_var]])[1]  
+    if (type == "SFO") {
+      k_names = grep(paste("k", obs_var, sep="_"), names(parms.all), value=TRUE)
+      k_tot = sum(parms.all[k_names])
+      DT50 = log(2)/k_tot
+      DT90 = log(10)/k_tot
+      for (k_name in k_names)
+      {
+        fit$ff[[sub("k_", "", k_name)]] = parms.all[[k_name]] / k_tot
       }
-      if (type == "FOMC") {
-        alpha = parms.all["alpha"]
-        beta = parms.all["beta"]
-        DT50 = beta * (2^(1/alpha) - 1)
-        DT90 = beta * (10^(1/alpha) - 1)
-        ff_names = grep(paste("f_to_", sep="_"), names(parms.all), value=TRUE)
-        for (ff_name in ff_names)
-        {
-          fit$ff[[sub("f_to", obs_var, ff_name)]] = parms.all[[ff_name]]
-        }
-        fit$ff[[paste(obs_var, "sink", sep="_")]] = 1 - sum(parms.all[ff_names])
+    }
+    if (type == "FOMC") {
+      alpha = parms.all["alpha"]
+      beta = parms.all["beta"]
+      DT50 = beta * (2^(1/alpha) - 1)
+      DT90 = beta * (10^(1/alpha) - 1)
+    }
+    if (type == "DFOP") {
+      k1 = parms.all["k1"]
+      k2 = parms.all["k2"]
+      g = parms.all["g"]
+      f <- function(t, x) {
+        fraction <- g * exp( - k1 * t) + (1 - g) * exp( - k2 * t)
+        (fraction - (1 - x/100))^2
       }
-      if (type == "SFORB") {
-        # FOCUS kinetics (2006), p. 60 f
-        k_out_names = grep(paste("k", obs_var, "free", sep="_"), names(parms.all), value=TRUE)
-        k_out_names = setdiff(k_out_names, paste("k", obs_var, "free", "bound", sep="_"))
-        k_1output = sum(parms.all[k_out_names])
-        k_12 = parms.all[paste("k", obs_var, "free", "bound", sep="_")]
-        k_21 = parms.all[paste("k", obs_var, "bound", "free", sep="_")]
+      DTmax <- 1000
+      DT50.o <- optimize(f, c(0.001, DTmax), x=50)$minimum
+      DT50 = ifelse(DTmax - DT50.o < 0.1, NA, DT50.o)
+      DT90.o <- optimize(f, c(0.001, DTmax), x=90)$minimum
+      DT90 = ifelse(DTmax - DT90.o < 0.1, NA, DT90.o)
+    }
+    if (type == "HS") {
+      k1 = parms.all["k1"]
+      k2 = parms.all["k2"]
+      tb = parms.all["tb"]
+      DTx <- function(x) {
+        DTx.a <- (log(100/(100 - x)))/k1
+        DTx.b <- tb + (log(100/(100 - x)) - k1 * tb)/k2
+        if (DTx.a < tb) DTx <- DTx.a
+        else DTx <- DTx.b
+        return(DTx)
+      }
+      DT50 <- DTx(50)
+      DT90 <- DTx(90)
+    }
+    # Back-calculation of formation fractions in case of nonlinear parent kinetics
+    if (type %in% c("FOMC", "DFOP", "HS")) {
+      ff_names = names(mkinmod$ff)
+      for (ff_name in ff_names)
+      {
+        fit$ff[[paste(obs_var, ff_name, sep="_")]] = 
+          eval(parse(text = mkinmod$ff[ff_name]), as.list(parms.all))
+      }
+      fit$ff[[paste(obs_var, "sink", sep="_")]] = 1 - sum(fit$ff)
+    }
+    if (type == "SFORB") {
+      # FOCUS kinetics (2006), p. 60 f
+      k_out_names = grep(paste("k", obs_var, "free", sep="_"), names(parms.all), value=TRUE)
+      k_out_names = setdiff(k_out_names, paste("k", obs_var, "free", "bound", sep="_"))
+      k_1output = sum(parms.all[k_out_names])
+      k_12 = parms.all[paste("k", obs_var, "free", "bound", sep="_")]
+      k_21 = parms.all[paste("k", obs_var, "bound", "free", sep="_")]
 
-        sqrt_exp = sqrt(1/4 * (k_12 + k_21 + k_1output)^2 + k_12 * k_21 - (k_12 + k_1output) * k_21)
-        b1 = 0.5 * (k_12 + k_21 + k_1output) + sqrt_exp
-        b2 = 0.5 * (k_12 + k_21 + k_1output) - sqrt_exp
+      sqrt_exp = sqrt(1/4 * (k_12 + k_21 + k_1output)^2 + k_12 * k_21 - (k_12 + k_1output) * k_21)
+      b1 = 0.5 * (k_12 + k_21 + k_1output) + sqrt_exp
+      b2 = 0.5 * (k_12 + k_21 + k_1output) - sqrt_exp
 
-        SFORB_fraction = function(t) {
-          ((k_12 + k_21 - b1)/(b2 - b1)) * exp(-b1 * t) +
-          ((k_12 + k_21 - b2)/(b1 - b2)) * exp(-b2 * t)
-        }
-        f_50 <- function(t) (SFORB_fraction(t) - 0.5)^2
-        max_DT <- 1000
-        DT50.o <- optimize(f_50, c(0.01, max_DT))$minimum
-        if (abs(DT50.o - max_DT) < 0.01) DT50 = NA else DT50 = DT50.o
-        f_90 <- function(t) (SFORB_fraction(t) - 0.1)^2
-        DT90.o <- optimize(f_90, c(0.01, 1000))$minimum
-        if (abs(DT90.o - max_DT) < 0.01) DT90 = NA else DT90 = DT90.o
-        for (k_out_name in k_out_names)
-        {
-          fit$ff[[sub("k_", "", k_out_name)]] = parms.all[[k_out_name]] / k_1output
-        }
+      SFORB_fraction = function(t) {
+        ((k_12 + k_21 - b1)/(b2 - b1)) * exp(-b1 * t) +
+        ((k_12 + k_21 - b2)/(b1 - b2)) * exp(-b2 * t)
       }
-      fit$distimes[obs_var, ] = c(DT50, DT90)
+      f_50 <- function(t) (SFORB_fraction(t) - 0.5)^2
+      max_DT <- 1000
+      DT50.o <- optimize(f_50, c(0.01, max_DT))$minimum
+      if (abs(DT50.o - max_DT) < 0.01) DT50 = NA else DT50 = DT50.o
+      f_90 <- function(t) (SFORB_fraction(t) - 0.1)^2
+      DT90.o <- optimize(f_90, c(0.01, 1000))$minimum
+      if (abs(DT90.o - max_DT) < 0.01) DT90 = NA else DT90 = DT90.o
+      for (k_out_name in k_out_names)
+      {
+        fit$ff[[sub("k_", "", k_out_name)]] = parms.all[[k_out_name]] / k_1output
+      }
+      # Return the eigenvalues for comparison with DFOP rate constants
+      fit$SFORB[[paste(obs_var, "b1", sep="_")]] = b1
+      fit$SFORB[[paste(obs_var, "b2", sep="_")]] = b2
+    }
+    fit$distimes[obs_var, ] = c(DT50, DT90)
   }
 
   # Collect observed, predicted and residuals
@@ -252,13 +402,60 @@ mkinfit <- function(mkinmod, observed,
   data$residual <- data$observed - data$predicted
   data$variable <- ordered(data$variable, levels = obs_vars)
   fit$data <- data[order(data$variable, data$time), ]
+  fit$atol <- atol
 
   class(fit) <- c("mkinfit", "modFit") 
   return(fit)
 }
 
 summary.mkinfit <- function(object, data = TRUE, distimes = TRUE, ff = TRUE, cov = FALSE,...) {
-  ans <- FME:::summary.modFit(object, cov = cov)
+  param  <- object$par
+  pnames <- names(param)
+  p      <- length(param)
+  covar  <- try(solve(0.5*object$hessian), silent = TRUE)   # unscaled covariance
+  if (!is.numeric(covar)) {
+    message <- "Cannot estimate covariance; system is singular"
+    warning(message)
+    covar <- matrix(data = NA, nrow = p, ncol = p)
+  } else message <- "ok"
+
+  rownames(covar) <- colnames(covar) <-pnames
+  rdf    <- object$df.residual
+  resvar <- object$ssr / rdf
+  se     <- sqrt(diag(covar) * resvar)
+  names(se) <- pnames
+  tval      <- param / se
+  modVariance <- object$ssr / length(object$residuals)
+
+  if (!all(object$start$lower >=0)) {
+    message <- "Note that the one-sided t-test may not be appropriate if
+      parameter values below zero are possible."
+    warning(message)
+  } else message <- "ok"
+
+  param <- cbind(param, se, tval, pt(tval, rdf, lower.tail = FALSE))
+  dimnames(param) <- list(pnames, c("Estimate", "Std. Error",
+                                    "t value", "Pr(>t)"))
+  if(cov)
+    ans <- list(residuals = object$residuals,
+                residualVariance = resvar,
+                sigma = sqrt(resvar),
+                modVariance = modVariance,
+                df = c(p, rdf), cov.unscaled = covar,
+                cov.scaled = covar * resvar,
+                info = object$info, niter = object$iterations,
+                stopmess = message,
+                par = param)
+  else
+    ans <- list(residuals = object$residuals,
+                residualVariance = resvar,
+                sigma = sqrt(resvar),
+                modVariance = modVariance,
+                df = c(p, rdf),
+                info = object$info, niter = object$iterations,
+                stopmess = message,
+                par = param)
+
   ans$diffs <- object$diffs
   if(data) ans$data <- object$data
   ans$start <- object$start
@@ -266,6 +463,7 @@ summary.mkinfit <- function(object, data = TRUE, distimes = TRUE, ff = TRUE, cov
   ans$errmin <- object$errmin 
   if(distimes) ans$distimes <- object$distimes
   if(ff) ans$ff <- object$ff
+  if(length(object$SFORB) != 0) ans$SFORB <- object$SFORB
   class(ans) <- c("summary.mkinfit", "summary.modFit") 
   return(ans)  
 }
@@ -296,14 +494,20 @@ print.summary.mkinfit <- function(x, digits = max(3, getOption("digits") - 3), .
 
   printdistimes <- !is.null(x$distimes)
   if(printdistimes){
-    cat("\nEstimated disappearance times\n")
+    cat("\nEstimated disappearance times:\n")
     print(x$distimes, digits=digits,...)
   }    
 
   printff <- !is.null(x$ff)
-  if(printdistimes){
-    cat("\nEstimated formation fractions\n")
+  if(printff){
+    cat("\nEstimated formation fractions:\n")
     print(data.frame(ff = x$ff), digits=digits,...)
+  }    
+
+  printSFORB <- !is.null(x$SFORB)
+  if(printSFORB){
+    cat("\nEstimated Eigenvalues of SFORB model(s):\n")
+    print(x$SFORB, digits=digits,...)
   }    
 
   printcor <- !is.null(x$cov.unscaled)
