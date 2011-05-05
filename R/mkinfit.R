@@ -1,4 +1,4 @@
-# $Id: mkinfit.R 87 2010-12-09 07:31:59Z jranke $
+# $Id: mkinfit.R 100 2011-05-05 12:08:24Z jranke $
 
 # Copyright (C) 2010 Johannes Ranke
 # Contact: mkin-devel@lists.berlios.de
@@ -27,7 +27,7 @@ mkinfit <- function(mkinmod, observed,
   lower = 0, upper = Inf,
   fixed_parms = NULL,
   fixed_initials = names(mkinmod$diffs)[-1],
-  eigen = TRUE,
+  eigen = FALSE,
   plot = FALSE, quiet = FALSE,
   err = NULL, weight = "none", scaleVar = FALSE,
   atol = 1e-6,
@@ -56,6 +56,14 @@ mkinfit <- function(mkinmod, observed,
   state.ini.optim.boxnames <- names(state.ini.optim)
   if(length(state.ini.optim) > 0) {
       names(state.ini.optim) <- paste(names(state.ini.optim), "0", sep="_")
+  }
+
+  # Set upper limit for formation fractions to one if formation fractions are
+  # directly defined and if no user input for upper limit is given
+  if (all(upper==Inf) & any(grepl("f_", names(parms.ini)))==TRUE){
+    upper=c( rep(Inf,length(parms.optim)))
+    upper[grep("f_", names(parms.optim))]=1
+    upper=c(rep(Inf, length(state.ini.optim)), upper)
   }
 
   # Decide if the solution of the model can be based on a simple analytical
@@ -216,7 +224,7 @@ mkinfit <- function(mkinmod, observed,
             parms = odeparms)
         }
         out_transformed_plot <- data.frame(time = out_plot[,"time"])
-        for (var in names(mkinmod$map)) {
+        for (var in obs_vars) {
           if((length(mkinmod$map[[var]]) == 1) || solution == "analytical") {
             out_transformed_plot[var] <- out_plot[, var]
           } else {
@@ -383,7 +391,7 @@ mkinfit <- function(mkinmod, observed,
       DT50.o <- optimize(f_50, c(0.01, max_DT))$minimum
       if (abs(DT50.o - max_DT) < 0.01) DT50 = NA else DT50 = DT50.o
       f_90 <- function(t) (SFORB_fraction(t) - 0.1)^2
-      DT90.o <- optimize(f_90, c(0.01, 1000))$minimum
+      DT90.o <- optimize(f_90, c(0.01, max_DT))$minimum
       if (abs(DT90.o - max_DT) < 0.01) DT90 = NA else DT90 = DT90.o
       for (k_out_name in k_out_names)
       {
