@@ -1,4 +1,4 @@
-# $Id:  $
+# $Id: mkinresplot.R 23 2012-04-11 08:32:25Z jranke $
 
 # Copyright (C) 2008-2011 Katrin Lindenberger and Johannes Ranke
 # Contact: mkin-devel@lists.berlios.de

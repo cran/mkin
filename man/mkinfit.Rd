@@ -11,14 +11,14 @@
 }
 \usage{
 mkinfit(mkinmod, observed, 
-  parms.ini = rep(0.1, length(mkinmod$parms)), 
+  parms.ini = "auto",
   state.ini = c(100, rep(0, length(mkinmod$diffs) - 1)), 
-  lower = 0, upper = Inf, 
   fixed_parms = NULL, fixed_initials = names(mkinmod$diffs)[-1], 
-  eigen = FALSE,
+  solution_type = "auto",
   plot = FALSE, quiet = FALSE, err = NULL, weight = "none", 
   scaleVar = FALSE, 
-  atol = 1e-6, ...)
+  atol = 1e-6, n.outtimes, 
+  trace_parms, ...)
 }
 \arguments{
   \item{mkinmod}{
@@ -35,11 +35,9 @@ mkinfit(mkinmod, observed,
     \code{\link{modFit}}.
   }
   \item{parms.ini}{
-    A named vector if initial values for the parameters, including parameters to
+    A named vector of initial values for the parameters, including parameters to
     be optimised and potentially also fixed parameters as indicated by \code{fixed_parms}.
-    The default is to set the initial values to 0.1. The setting of the initial values for 
-    the parameters has a strong impart on performance and it lies in the responsibilty of the 
-    user to set sensible initial values.   
+    If set to "auto", initial values for rate constants are set to default values.
   }
   \item{state.ini}{
     A named vector of initial values for the state variables of the model. In case the 
@@ -47,16 +45,6 @@ mkinfit(mkinmod, observed,
     differ from the names of the observed variables (see \code{map} component of 
     \code{\link{mkinmod}}). The default is to set the initial value of the first model
     variable to 100 and all others to 0.
-  }
-  \item{lower}{
-    Lower bounds for the parameters, passed to \code{\link{modFit}}. Defaults to 0 because
-    negative values to not make sense for the models currently created by \code{\link{mkinmod}}.
-  }
-  \item{upper}{
-    Upper bounds for the parameters, passed to \code{\link{modFit}}. Defaults to \code{Inf} 
-    except for formation fraction parameters. Setting non-infinite upper bounds has a strong 
-    impact on performance, and using a method like "L-BFGS-B" (by specifying an additional 
-    \code{method} argument) is recommended.
   }
   \item{fixed_parms}{
     The names of parameters that should not be optimised but rather kept at the values
@@ -66,11 +54,16 @@ mkinfit(mkinmod, observed,
     The names of model variables for which the initial state at time 0 should be excluded
     from the optimisation. Defaults to all state variables except for the first one.
   }
-  \item{eigen}{
-    Should the solution of the system of differential equations be based on the 
+  \item{solution_type}{
+    If set to "eigen", the solution of the system of differential equations is based on the 
     spectral decomposition of the coefficient matrix in cases that this is
-    possible? Be aware that the results may differ from the results returned using
-    the ode solver.
+    possible. If set to "deSolve", a numerical ode solver from package
+    \code{\link{deSolve}} is used. If set to "analytical", an analytical solution
+    of the model is used. This is only implemented for simple degradation experiments
+    with only one state variable, i.e. with no metabolites. The default is "auto", 
+    which uses "analytical" if possible, otherwise "eigen" if the model can be expressed
+    using eigenvalues and eigenvectors, and finally "deSolve" for the remaining
+    models (time dependence of degradation rates and metabolites).
   }
   \item{plot}{
     Should the observed values and the numerical solutions be plotted at each stage
@@ -94,6 +87,15 @@ mkinfit(mkinmod, observed,
     Absolute error tolerance, passed to \code{\link{ode}}. Default is 1e-6 as in 
     \code{\link{lsoda}}.
   }
+  \item{n.outtimes}{
+    The length of the dataseries that is produced by the model prediction
+    function \code{\link{mkinpredict}}. This impacts the accuracy of
+    the numerical solver if that is used (see \code{solution} argument. 
+    The default value is 100.
+  }
+  \item{trace_parms}{
+    Should a trace of the parameter values be listed?
+  }
   \item{\dots}{
     Further arguments that will be passed to \code{\link{modFit}}. 
   }
@@ -103,7 +105,7 @@ mkinfit(mkinmod, observed,
     A summary can be obtained by \code{\link{summary.mkinfit}}. 
 }
 \author{
-  Johannes Ranke <jranke@{harlan.com,uni-bremen.de}>
+  Johannes Ranke <jranke@uni-bremen.de>
 }
 \examples{
 # One parent compound, one metabolite, both single first order.

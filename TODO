@@ -1,0 +1,11 @@
+Must have:
+- Some more testing with coupled models with FOMC, DFOP, HS and SFORB for parent
+- Some testing with SFORB for metabolites
+
+Nice to have:
+- Calculate confidence intervals for parameters assuming normal distribution
+- Calculate confidence intervals for DT50 and DT90 values when only one parameter is involved
+- Add more unit tests for mkinfit
+- Document validation against fits documented in chapter 13 of FOCUS (2006)
+- Reproduce example anaylses (L1, L2, ...) in FOCUS (2006)
+- Generate confidence intervals for DT50 and DT90 values for other cases

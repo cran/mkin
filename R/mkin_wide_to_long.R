@@ -1,4 +1,4 @@
-# $Id: mkin_wide_to_long.R 59 2010-07-28 12:29:15Z jranke $
+# $Id: mkin_wide_to_long.R 23 2012-04-11 08:32:25Z jranke $
 
 # Copyright (C) 2010 Johannes Ranke
 # Contact: mkin-devel@lists.berlios.de
