@@ -1,4 +1,4 @@
-c533a1824e70956c240a1ffc2d962170 *DESCRIPTION
+f3167a2d173e94f4f20f52e98dc5059c *DESCRIPTION
 6b87afbc4b2eea4f046ee6fdae1bea0d *NAMESPACE
 abb73b9313b5e30a62b61b278c9b9fcf *R/DFOP.solution.R
 0f0230623ae9edce9e07f2137e987428 *R/FOMC.solution.R
@@ -10,13 +10,13 @@ b14fe19973883d95d7d575679826e3ee *R/endpoints.R
 fab897a2a03749839ce4f736e3fcd050 *R/mkin_long_to_wide.R
 0f8e31c2d8f72bb4b6ceb4612fad875e *R/mkin_wide_to_long.R
 3734b37971b97d1e2fdaf419fd7121f3 *R/mkinerrmin.R
-46dc0aa0319a8e4307c6ff5636e1adbb *R/mkinfit.R
+0c74148a32db2838cbca74a571b91e2f *R/mkinfit.R
 e3e52646f30c574d785de47dd7eb2d3c *R/mkinmod.R
-8064c3afcf570773598c8d0b429f7ada *R/mkinplot.R
-d14501ba12dc6e5af336cc4b1359d3ba *R/mkinpredict.R
+9a4e84bcaa6eea9fffd2438520e46b83 *R/mkinplot.R
+5cd4c91a6fe5db56f3a0b5572ce4bb22 *R/mkinpredict.R
 34fdb653638cdb5f71080cd5633a139e *R/mkinresplot.R
 7e0ed49219810390d71832f64e71058e *R/transform_odeparms.R
-5c2701b0ab1ebc01aa90e0ac522a2296 *TODO
+10c6e4ef2f5c5ebe3676437f02534110 *TODO
 0b20fddcdf5b05d90e58c499d67b5b0e *data/FOCUS_2006_DFOP_ref_A_to_B.rda
 2036c4c97d5bf0fa8167918d03a1ca14 *data/FOCUS_2006_FOMC_ref_A_to_F.rda
 60b3da7a96b080c64cb2167673a78e87 *data/FOCUS_2006_HS_ref_A_to_F.rda
@@ -29,7 +29,7 @@ eb2b0d12279a88ca7e2c4d75443e659b *inst/GUI/simple-Gtk.R
 2ec2096c31cbff818ed7b0ac7946914b *inst/GUI/simple.R
 b6528b54a3f9bf2292931a5b5966d111 *inst/GUI/test.R
 65945cd86f8b5b3a204940dc7a8c8db5 *inst/doc/mkin.Rnw
-15e7ce1dbb6487f44bae721b0edc18d3 *inst/doc/mkin.pdf
+3e4f0f4f3b9814172abd6e9e93c9788d *inst/doc/mkin.pdf
 334f0de6ed55dc79f59addf091097353 *inst/unitTests/Makefile
 80c5e5c3f5f4b9a0ec3b3ad4667b8d12 *inst/unitTests/runit.mkinfit.R
 cae05feba5452928df385035212e116e *inst/unitTests/runit.mkinpredict.R
@@ -48,10 +48,10 @@ ef72c15515bc22381aaee1b7bb46571d *man/SFO.solution.Rd
 23279efa6761cc9aaf0f158f7cf52d15 *man/mkin_long_to_wide.Rd
 8b04d7eef1dd321de35c198b1c4a5204 *man/mkin_wide_to_long.Rd
 423fed5b0cc30e5ffad6b7fd01d839d6 *man/mkinerrmin.Rd
-b024befd43924074f916c3bfcb7770bc *man/mkinfit.Rd
+1321290ce722275d47f96182f3e52c8d *man/mkinfit.Rd
 eeeec6d869c15710e4f3bf067534d4f5 *man/mkinmod.Rd
 6f1d26ade0d980851707093a50e6893d *man/mkinplot.Rd
-5069f0bb88cc13288095ea74a1b9eec3 *man/mkinpredict.Rd
+d684f0a47450fd127a4c8a6ef084cf14 *man/mkinpredict.Rd
 a9e9b6dd61f8d19b75c4c660315b10f3 *man/mkinresplot.Rd
 9415426172f79e48645ae9f08e1e8e1b *man/schaefer07_complex_case.Rd
 fc7b7ecf4104b606cd8a501be3e4a4d5 *man/summary.mkinfit.Rd

@@ -1,4 +1,4 @@
-# $Id: mkinfit.R 41 2012-06-25 23:45:39Z jranke $
+# $Id: mkinfit.R 49 2012-07-03 15:46:14Z jranke $
 
 # Copyright (C) 2010-2012 Johannes Ranke
 # Contact: jranke@uni-bremen.de
@@ -29,7 +29,7 @@ mkinfit <- function(mkinmod, observed,
   solution_type = "auto",
   plot = FALSE, quiet = FALSE,
   err = NULL, weight = "none", scaleVar = FALSE,
-  atol = 1e-6, n.outtimes = 100,
+  atol = 1e-8, rtol = 1e-10, n.outtimes = 100,
   trace_parms = FALSE,
   ...)
 {
@@ -130,7 +130,7 @@ mkinfit <- function(mkinmod, observed,
     parms <- backtransform_odeparms(odeparms, mod_vars)
 
     # Solve the system with current transformed parameter values
-    out <- mkinpredict(mkinmod, parms, odeini, outtimes, solution_type = solution_type, ...)
+    out <- mkinpredict(mkinmod, parms, odeini, outtimes, solution_type = solution_type, atol = atol, rtol = rtol, ...)
 
     assign("out_predicted", out, inherits=TRUE)
 
@@ -146,7 +146,7 @@ mkinfit <- function(mkinmod, observed,
         outtimes_plot = seq(min(observed$time), max(observed$time), length.out=100)
 
         out_plot <- mkinpredict(mkinmod, parms, odeini, outtimes_plot, 
-          solution_type = solution_type, ...)
+          solution_type = solution_type, atol = atol, rtol = rtol, ...)
 
         plot(0, type="n", 
           xlim = range(observed$time), ylim = range(observed$value, na.rm=TRUE),
@@ -198,6 +198,7 @@ mkinfit <- function(mkinmod, observed,
   data$variable <- ordered(data$variable, levels = obs_vars)
   fit$data <- data[order(data$variable, data$time), ]
   fit$atol <- atol
+  fit$rtol <- rtol
   fit$parms.all <- parms.all # Return all backtransformed parameters for summary
   fit$odeparms.final <- parms.all[mkinmod$parms] # Return ode parameters for further fitting
   fit$date <- date()
