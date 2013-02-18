@@ -1,4 +1,4 @@
-# $Id: mkinresplot.R 62 2013-02-17 20:18:28Z jranke $
+# $Id: mkinresplot.R 66 2013-02-18 16:21:36Z jranke $
 
 # Copyright (C) 2008-2011 Katrin Lindenberger and Johannes Ranke
 # Contact: mkin-devel@lists.berlios.de
@@ -17,7 +17,7 @@
 
 # You should have received a copy of the GNU General Public License along with
 # this program. If not, see <http://www.gnu.org/licenses/>
-utils::globalVariables(c("variable", "residual"))
+if(getRversion() >= '2.15.1') utils::globalVariables(c("variable", "residual"))
 
 mkinresplot <- function (object, obs_vars = vector(), 
   xlab = "Time", ylab = "Residual",
@@ -46,9 +46,8 @@ mkinresplot <- function (object, obs_vars = vector(),
 	}
 
   abline(h = 0, lty = 2)
-  title(paste("Residuals of mkin fit"), font.main = 1)
 
- 	if (legend == TRUE) {
+  if (legend == TRUE) {
     legend(lpos, inset = c(0.05, 0.05), legend = vars, 
     col = col_obs, pch = pch_obs)
   }

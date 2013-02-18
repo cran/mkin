@@ -20,7 +20,8 @@
 
 # You should have received a copy of the GNU General Public License along with
 # this program. If not, see <http://www.gnu.org/licenses/>
-utils::globalVariables(c("type", "variable", "observed"))
+if(getRversion() >= '2.15.1') utils::globalVariables(c("type", "variable", "observed"))
+
 plot.mkinfit <- function(x, fit = x,
   xlab = "Time", ylab = "Observed",
   xlim = range(fit$data$time), ylim = c(0, max(fit$data$observed, na.rm = TRUE)),
@@ -30,9 +31,8 @@ plot.mkinfit <- function(x, fit = x,
   add = FALSE, legend = !add, ...)
 {
   solution_type = fit$solution_type
-  fixed <- fit$fixed$value
-  names(fixed) <- rownames(fit$fixed)
-  parms.all <- c(fit$parms.all, fixed)
+  parms.all <- c(fit$bparms.optim, fit$bparms.fixed)
+
   ininames <- c(
     rownames(subset(fit$start, type == "state")),
     rownames(subset(fit$fixed, type == "state")))

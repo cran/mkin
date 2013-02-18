@@ -1,4 +1,4 @@
-# $Id: mkinerrmin.R 62 2013-02-17 20:18:28Z jranke $
+# $Id: mkinerrmin.R 67 2013-02-18 22:11:49Z jranke $
 
 # Copyright (C) 2010-2013 Johannes Ranke
 # Contact: jranke@uni-bremen.de
@@ -17,10 +17,11 @@
 
 # You should have received a copy of the GNU General Public License along with
 # this program. If not, see <http://www.gnu.org/licenses/>
-utils::globalVariables(c("name"))
+if(getRversion() >= '2.15.1') utils::globalVariables(c("name"))
+
 mkinerrmin <- function(fit, alpha = 0.05)
 {
-  parms.optim <- fit$parms.all
+  parms.optim <- fit$par
   kinerrmin <- function(errdata, n.parms) {
     means.mean <- mean(errdata$value_mean, na.rm=TRUE)
     df = length(errdata$value_mean) - n.parms
