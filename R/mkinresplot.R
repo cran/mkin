@@ -1,4 +1,4 @@
-# $Id: mkinresplot.R 23 2012-04-11 08:32:25Z jranke $
+# $Id: mkinresplot.R 62 2013-02-17 20:18:28Z jranke $
 
 # Copyright (C) 2008-2011 Katrin Lindenberger and Johannes Ranke
 # Contact: mkin-devel@lists.berlios.de
@@ -17,6 +17,7 @@
 
 # You should have received a copy of the GNU General Public License along with
 # this program. If not, see <http://www.gnu.org/licenses/>
+utils::globalVariables(c("variable", "residual"))
 
 mkinresplot <- function (object, obs_vars = vector(), 
   xlab = "Time", ylab = "Residual",

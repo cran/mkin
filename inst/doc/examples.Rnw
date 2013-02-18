@@ -47,7 +47,6 @@ University of Bremen\\
 \textbf{Key words}: Kinetics, FOCUS, nonlinear optimisation
 
 \section{Kinetic evaluations for parent compounds}
-\label{intro}
 
 These examples are also evaluated in a parallel vignette of the
 \Rpackage{kinfit} package \citep{pkg:kinfit}. The datasets are from Appendix 3,
@@ -123,7 +122,6 @@ The following code defines example dataset L2 from the FOCUS kinetics
 report, p. 287
 
 <<FOCUS_2006_L2_data, echo=TRUE, eval=TRUE>>=
-library("mkin")
 FOCUS_2006_L2 = data.frame(
   t = rep(c(0, 1, 3, 7, 14, 28), each = 2),
   parent = c(96.1, 91.8, 41.4, 38.7,
@@ -203,7 +201,6 @@ The following code defines example dataset L3 from the FOCUS kinetics
 report, p. 290
 
 <<FOCUS_2006_L3_data, echo=TRUE, eval=TRUE>>=
-library("mkin")
 FOCUS_2006_L3 = data.frame(
   t = c(0, 3, 7, 14, 30, 60, 91, 120),
   parent = c(97.8, 60, 51, 43, 35, 22, 15, 12))
@@ -252,7 +249,6 @@ The following code defines example dataset L4 from the FOCUS kinetics
 report, p. 293
 
 <<FOCUS_2006_L4_data, echo=TRUE, eval=TRUE>>=
-library("mkin")
 FOCUS_2006_L4 = data.frame(
   t = c(0, 3, 7, 14, 30, 60, 91, 120),
   parent = c(96.6, 96.3, 94.3, 88.8, 74.9, 59.9, 53.5, 49.0))
@@ -284,6 +280,54 @@ model. However, the difference appears negligible.
 
 \bibliographystyle{plainnat}
 \bibliography{references}
+
+\section{Kinetic evaluations for parent and metabolites}
+
+\subsection{Laboratory Data for example compound Z}
+
+The following code defines the example dataset from Appendix 7 to the FOCUS kinetics
+report, p.350 
+
+<<FOCUS_2006_Z_data, echo=TRUE, eval=TRUE>>=
+LOD = 0.5
+FOCUS_2006_Z = data.frame(
+  t = c(0, 0.04, 0.125, 0.29, 0.54, 1, 2, 3, 4, 7, 10, 14, 21, 42, 61, 96, 124),
+  Z = c(100, 81.7, 70.4, 51.1, 41.2, 6.6, 4.6, 3.9, 4.6, 4.3, 6.8, 2.9, 3.5,
+             5.3, 4.4, 1.2, 0.7),
+  Z1 = c(0, 18.3, 29.6, 46.3, 55.1, 65.7, 39.1, 36, 15.3, 5.6, 1.1, 1.6, 0.6,
+         0.5 * LOD, NA, NA, NA),
+  Z2 = c(0, NA, 0.5 * LOD, 2.6, 3.8, 15.3, 37.2, 31.7, 35.6, 14.5, 0.8, 2.1,
+         1.9, 0.5 * LOD, NA, NA, NA),
+  Z3 = c(0, NA, NA, NA, NA, 0.5 * LOD, 9.2, 13.1, 22.3, 28.4, 32.5, 25.2, 17.2,
+         4.8, 4.5, 2.8, 4.4))
+
+FOCUS_2006_Z_mkin <- mkin_wide_to_long(FOCUS_2006_Z)
+@
+
+The next step is to set up the models used for the kinetic analysis. As the 
+simultaneous fit of parent and the first metabolite is usually straightforward,
+Step 1 (SFO for parent only) is skipped here. We start with the model 2a, 
+with formation and decline of metabolite Z1 and the pathway from parent
+directly to sink included (default in mkin).
+
+<<FOCUS_2006_Z_fits_1, echo=TRUE, fig=TRUE>>=
+Z.2a <- mkinmod(Z = list(type = "SFO", to = "Z1"),
+                Z1 = list(type = "SFO"))
+Z.2a.ff <- mkinmod(Z = list(type = "SFO", to = "Z1"),
+                Z1 = list(type = "SFO"), use_of_ff = "max")
+
+m.Z.2a <- mkinfit(Z.2a, FOCUS_2006_Z_mkin)
+summary(m.Z.2a, data = FALSE)
+plot(m.Z.2a)
+@
+
+<<FOCUS_2006_Z_fits_2, echo=TRUE>>=
+Z.2b <- mkinmod(Z = list(type = "SFO", to = "Z1", sink = FALSE),
+                Z1 = list(type = "SFO"))
+Z.2b.ff <- mkinmod(Z = list(type = "SFO", to = "Z1", sink = FALSE), # needs warning
+                Z1 = list(type = "SFO"), use_of_ff = "max")
+
+@
 
 \end{document}
 % vim: set foldmethod=syntax:
