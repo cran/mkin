@@ -1,9 +1,10 @@
 pkgname <- "mkin"
 source(file.path(R.home("share"), "R", "examples-header.R"))
 options(warn = 1)
+options(pager = "console")
 library('mkin')
 
-assign(".oldSearch", search(), pos = 'CheckExEnv')
+base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
 cleanEx()
 nameEx("DFOP.solution")
 ### * DFOP.solution
@@ -323,7 +324,7 @@ flush(stderr()); flush(stdout())
   # The integration method does not make a lot of difference
   mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), 0:20, atol = 1e-20, method = "ode45")[20,]
   mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), 0:20, atol = 1e-20, method = "rk4")[20,]
-  # The number of output times does make a lot of difference
+  # The number of output times used to make a lot of difference until the default for atol was adjusted
   mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), seq(0, 20, by = 0.1))[201,]
   mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), seq(0, 20, by = 0.01))[2001,]
 
@@ -450,7 +451,7 @@ backtransform_odeparms(transformed, c("parent", "m1"))
 
 ### * <FOOTER>
 ###
-cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
+base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
 grDevices::dev.off()
 ###
 ### Local variables: ***

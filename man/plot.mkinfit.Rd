@@ -6,14 +6,14 @@
 \description{
   Solves the differential equations with the optimised and fixed parameters
   from a previous successful call to \code{\link{mkinfit}} and plots 
-  the observed data together with the numerical solution of the fitted model.
+  the observed data together with the solution of the fitted model.
 }
 \usage{
 \method{plot}{mkinfit}(x, fit = x, xlab = "Time", ylab = "Observed", 
   xlim = range(fit$data$time), ylim = c(0, max(fit$data$observed, na.rm = TRUE)),
   col_obs = 1:length(fit$mkinmod$map), pch_obs = col_obs, 
   lty_obs = rep(1, length(fit$mkinmod$map)),
-  add = FALSE, legend = !add, ...)
+  add = FALSE, legend = !add, lpos = "topright", inset = c(0.05, 0.05), ...)
 }
 \arguments{
   \item{x}{
@@ -48,6 +48,12 @@
 }
   \item{legend}{
     should a legend be added to the plot?
+}
+  \item{lpos}{
+    position of the legend. Passed to \code{\link{legend}} as the first argument.
+}
+  \item{inset}{
+    Passed to \code{\link{legend}} if applicable.
 }
   \item{\dots}{
    further arguments passed to \code{\link{plot}}.

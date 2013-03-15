@@ -1,4 +1,4 @@
-# $Id: mkinerrmin.R 67 2013-02-18 22:11:49Z jranke $
+# $Id: mkinerrmin.R 70 2013-02-21 22:06:54Z jranke $
 
 # Copyright (C) 2010-2013 Johannes Ranke
 # Contact: jranke@uni-bremen.de
