@@ -273,7 +273,7 @@ Z.mkin.1 <- mkinmod(Z0 = list(type = "SFO", to = "Z1", sink = FALSE),
                 Z2 = list(type = "SFO", to = "Z3"),
                 Z3 = list(type = "SFORB"))
 m.Z.mkin.1 <- mkinfit(Z.mkin.1, FOCUS_2006_Z_mkin, 
-                  parms.ini = c(k_Z0_Z1 = 0.5, k_Z1_Z2 = 0.3, k_Z2_Z3 = 0.2), 
+                  parms.ini = c(k_Z0_Z1 = 0.5, k_Z1_Z2 = 0.3),
                   quiet = TRUE)
 plot(m.Z.mkin.1)
 summary(m.Z.mkin.1, data = FALSE)

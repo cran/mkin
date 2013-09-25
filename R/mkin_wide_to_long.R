@@ -1,4 +1,4 @@
-# $Id: mkin_wide_to_long.R 70 2013-02-21 22:06:54Z jranke $
+# $Id: mkin_wide_to_long.R 83 2013-06-18 14:08:11Z jranke $
 
 # Copyright (C) 2010-2013 Johannes Ranke
 # Contact: mkin-devel@lists.berlios.de
@@ -27,8 +27,8 @@ mkin_wide_to_long <- function(wide_data, time = "t")
   n <- length(colnames) - 1
   long_data <- data.frame(
     name = rep(vars, each = length(wide_data[[time]])),
-    time = rep(wide_data[[time]], n),
-    value = unlist(wide_data[vars]),
+    time = as.numeric(rep(wide_data[[time]], n)),
+    value = as.numeric(unlist(wide_data[vars])),
     row.names = NULL)
   return(long_data)
 }

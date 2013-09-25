@@ -1,4 +1,4 @@
-# $Id: mkinmod.R 65 2013-02-18 14:11:41Z jranke $
+# $Id: mkinmod.R 82 2013-04-14 12:42:06Z jranke $
 
 # Copyright (C) 2010-2012 Johannes Ranke {{{
 # Contact: jranke@uni-bremen.de
@@ -26,6 +26,7 @@ mkinmod <- function(..., use_of_ff = "min")
   # Check if any of the names of the observed variables contains any other
   for (obs_var in obs_vars) {
     if (length(grep(obs_var, obs_vars)) > 1) stop("Sorry, variable names can not contain each other")
+    if (grepl("_to_", obs_var)) stop("Sorry, names of observed variables can not contain _to_")
   }
 
   if (!use_of_ff %in% c("min", "max"))
