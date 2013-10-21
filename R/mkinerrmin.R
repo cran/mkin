@@ -1,4 +1,4 @@
-# $Id: mkinerrmin.R 70 2013-02-21 22:06:54Z jranke $
+# $Id: mkinerrmin.R 120 2013-10-21 09:46:27Z jranke $
 
 # Copyright (C) 2010-2013 Johannes Ranke
 # Contact: jranke@uni-bremen.de
@@ -17,21 +17,19 @@
 
 # You should have received a copy of the GNU General Public License along with
 # this program. If not, see <http://www.gnu.org/licenses/>
-if(getRversion() >= '2.15.1') utils::globalVariables(c("name"))
+if(getRversion() >= '2.15.1') utils::globalVariables(c("name", "value_mean"))
 
 mkinerrmin <- function(fit, alpha = 0.05)
 {
   parms.optim <- fit$par
+
   kinerrmin <- function(errdata, n.parms) {
-    means.mean <- mean(errdata$value_mean, na.rm=TRUE)
+    means.mean <- mean(errdata$value_mean, na.rm = TRUE)
     df = length(errdata$value_mean) - n.parms
   
-    f <- function(err)
-    {
-      (sum((errdata$value_mean - errdata$value_pred)^2/((err * means.mean)^2)) - 
-       qchisq(1 - alpha,df))^2
-    }
-    err.min <- optimize(f, c(0.01,0.9))$minimum
+    err.min <- sqrt((1 / qchisq(1 - alpha, df)) *
+               sum((errdata$value_mean - errdata$value_pred)^2)/(means.mean^2))
+
     return(list(err.min = err.min, n.optim = n.parms, df = df))
   }
 
@@ -39,6 +37,12 @@ mkinerrmin <- function(fit, alpha = 0.05)
   errdata <- merge(means, fit$predicted, by = c("time", "name"), 
     suffixes = c("_mean", "_pred"))
   errdata <- errdata[order(errdata$time, errdata$name), ]
+
+  # Any value that is set to exactly zero is not really an observed value
+  # Remove those at time 0 - those are caused by the FOCUS recommendation
+  # to set metabolites occurring at time 0 to 0
+  errdata <- subset(errdata, !(time == 0 & value_mean == 0))
+
   n.optim.overall <- length(parms.optim)
 
   errmin.overall <- kinerrmin(errdata, n.optim.overall)
