@@ -1,4 +1,4 @@
-# $Id: mkinfit.R 118 2013-10-17 13:24:42Z jranke $
+# $Id: mkinfit.R 137 2013-11-05 08:05:44Z jranke $
 
 # Copyright (C) 2010-2013 Johannes Ranke
 # Contact: jranke@uni-bremen.de
@@ -53,13 +53,18 @@ mkinfit <- function(mkinmod, observed,
   # Prevent inital parameter specifications that are not in the model
   wrongpar.names <- setdiff(names(parms.ini), mkinmod$parms)
   if (length(wrongpar.names) > 0) {
-    stop("Initial parameter(s) ", paste(wrongpar.names, collapse = ", "), " not used in the model")
+    stop("Initial parameter(s) ", paste(wrongpar.names, collapse = ", "),
+         " not used in the model")
   }
 
+  k_salt = 0
   defaultpar.names <- setdiff(mkinmod$parms, names(parms.ini))
   for (parmname in defaultpar.names) {
     # Default values for rate constants, depending on the parameterisation
-    if (substr(parmname, 1, 2) == "k_") parms.ini[parmname] = 0.1 
+    if (substr(parmname, 1, 2) == "k_") {
+      parms.ini[parmname] = 0.1 + k_salt
+      k_salt = k_salt + 1e-4
+    }
     # Default values for rate constants for reversible binding
     if (grepl("free_bound$", parmname)) parms.ini[parmname] = 0.1 
     if (grepl("bound_free$", parmname)) parms.ini[parmname] = 0.02
@@ -114,7 +119,7 @@ mkinfit <- function(mkinmod, observed,
       solution_type = "analytical"
     } else {
       if (is.matrix(mkinmod$coefmat)) {
-	solution_type = "eigen"
+        solution_type = "eigen"
         if (max(observed$value, na.rm = TRUE) < 0.1) {
           stop("The combination of small observed values (all < 0.1) and solution_type = eigen is error-prone")
         }
@@ -144,7 +149,10 @@ mkinfit <- function(mkinmod, observed,
     if(length(state.ini.optim) > 0) {
       odeini <- c(P[1:length(state.ini.optim)], state.ini.fixed)
       names(odeini) <- c(state.ini.optim.boxnames, state.ini.fixed.boxnames)
-    } else odeini <- state.ini.fixed.boxnames
+    } else {
+      odeini <- state.ini.fixed
+      names(odeini) <- state.ini.fixed.boxnames
+    }
 
     odeparms <- c(P[(length(state.ini.optim) + 1):length(P)], parms.fixed)
 
@@ -246,8 +254,8 @@ mkinfit <- function(mkinmod, observed,
                      rep("deparm", length(parms.optim)))
   fit$start$transformed = c(state.ini.optim, parms.optim)
 
-  fit$fixed <- data.frame(
-    value = c(state.ini.fixed, parms.fixed))
+  fit$fixed <- data.frame(value = c(state.ini.fixed, 
+      backtransform_odeparms(parms.fixed, mod_vars)))
   fit$fixed$type = c(rep("state", length(state.ini.fixed)), 
                      rep("deparm", length(parms.fixed)))
 

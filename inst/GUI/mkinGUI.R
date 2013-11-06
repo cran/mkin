@@ -1,6 +1,6 @@
-# $Id: simple.R 122 2013-10-21 20:19:57Z jranke $ {{{1
+# $Id: mkinGUI.R 122 2013-10-21 20:19:57Z jranke $ {{{1
 
-# Simple gWidgetsWWW2 GUI for mkin
+# gWidgetsWWW2 GUI for mkin
 
 # Copyright (C) 2013 Johannes Ranke
 # Contact: jranke@uni-bremen.de, johannesranke@eurofins.com
@@ -20,21 +20,26 @@
 # You should have received a copy of the GNU General Public License along with
 # this program. If not, see <http://www.gnu.org/licenses/>
 require(mkin) # {{{1
-# Set the GUI title and create the parent frame {{{1
-GUI_title <- "Simple Browser based GUI for kinetic evaluations using mkin"
-w <- gwindow(GUI_title)
-sb <- gstatusbar("Powered by gWidgetsWWW2 and Rook", cont = w)
-g <- gframe(GUI_title, cont = w, use.scrollwindow = TRUE, horizontal = FALSE)
+# Set the GUI title and create the basic widget layout {{{1
+w      <- gwindow("Browser based GUI for kinetic evaluations using mkin")
+sb     <- gstatusbar("Powered by gWidgetsWWW2 and Rook", cont = w)
+pg     <- gpanedgroup(cont = w, default.size = 300)
+center <- gnotebook(cont = pg)
+left   <- gvbox(cont = pg)
+# Helper functions {{{1
+# Override function for making it possible to override original data in the GUI {{{2
+override <- function(d) {
+  data.frame(name = d$name, time = d$time, 
+             value = ifelse(is.na(d$override), d$value, d$override),
+             err = d$err)
+}
 # Set default values for project data {{{1
 # Initial project file name {{{2
 project_file <- "mkin_FOCUS_2006.RData"
 # Initial studies {{{2
 studies.df <- data.frame(Index = as.integer(1), 
-                         Author = "FOCUS kinetics workgroup",
-                         Year = "2006", 
-                         Title = "FOCUS Kinetics",
+                         Citation = "FOCUS (2006) Guidance on degradation kinetics",
                          stringsAsFactors = FALSE)
-
 # Initial datasets {{{2
 ds <- list()
 observed.all <- vector()
@@ -56,33 +61,6 @@ for (i in 1:2) {
   ds[[ds.index]]$data$override = as.numeric(NA)
   ds[[ds.index]]$data$err = 1
 }
-# Initial models {{{2
-m <- list()
-m[["1"]] <- mkinmod(parent = list(type = "SFO"))
-m[["1"]]$name = "SFO"
-m[["2"]] <- mkinmod(parent = list(type = "FOMC"))
-m[["2"]]$name = "FOMC"
-m[["3"]] <- mkinmod(parent = list(type = "DFOP"))
-m[["3"]]$name = "DFOP"
-m[["4"]] <- mkinmod(parent = list(type = "SFO", to = "m1"),
-                          m1 = list(type = "SFO"),
-                          use_of_ff = "max")
-m[["4"]]$name = "SFO_SFO"
-# Initial fit lists {{{2
-override <- function(d) {
-  data.frame(name = d$name, time = d$time, 
-             value = ifelse(is.na(d$override), d$value, d$override),
-             err = d$err)
-}
-# The GUI elements for each dataset are kept in lists
-f.gg <- f.gg.sel <- f.gg.parms <- f.gg.opts <- list()
-# The fits and summaries are collected in a list of lists
-f <- s <- list()
-for (ds.i in 1:length(ds)) {
-  f[[as.character(ds.i)]] <- list()
-  s[[as.character(ds.i)]] <- list()
-}
-# Data frames with datasets, models and fits to be continuosly updated {{{1
 # Dataframe with datasets for selection {{{2
 update_ds.df <- function() {
   ds.n <- length(ds)
@@ -102,6 +80,18 @@ update_ds.df <- function() {
 ds.df <- data.frame()
 update_ds.df()
 ds.cur = "1"
+# Initial models {{{2
+m <- list()
+m[["1"]] <- mkinmod(parent = list(type = "SFO"))
+m[["1"]]$name = "SFO"
+m[["2"]] <- mkinmod(parent = list(type = "FOMC"))
+m[["2"]]$name = "FOMC"
+m[["3"]] <- mkinmod(parent = list(type = "DFOP"))
+m[["3"]]$name = "DFOP"
+m[["4"]] <- mkinmod(parent = list(type = "SFO", to = "m1"),
+                          m1 = list(type = "SFO"),
+                          use_of_ff = "max")
+m[["4"]]$name = "SFO_SFO"
 # Dataframe with models for selection {{{2
 update_m.df <- function() {
   m.n <- length(m)
@@ -116,213 +106,158 @@ update_m.df <- function() {
 m.df <- data.frame()
 update_m.df()
 m.cur = "1"
-# Expandable group for project data management {{{1
-prg <- gexpandgroup("Project file management", cont = g)
+# Initial fit lists {{{2
+# The fits and summaries are collected in lists of lists
+f <- s <- list()
+# Dataframe with fits for selection {{{2
+update_f.df <- function() {
+  f.df <<- data.frame(Fit = character(),
+                      Dataset = character(),
+                      Model = character(), 
+                      stringsAsFactors = FALSE)
+  f.count <- 0
+  for (fit.index in names(f)) {
+    f.count <- f.count + 1
+    ftmp <- f[[fit.index]]
+    f.df[f.count, ] <<- c(as.character(f.count), ftmp$ds.index, ftmp$mkinmod$name)
+  }
+}
+f.df.empty <- f.df <- data.frame(Fit = "0", 
+                               Dataset = "", 
+                               Model = "",
+                               stringsAsFactors = FALSE)
+# Widgets and handlers for project data {{{1
+prg <- gexpandgroup("Project file management", cont = left, horizontal = FALSE)
 # Project data management handler functions {{{2
 upload_file_handler <- function(h, ...)
 {
+  # General
   tmpfile <- normalizePath(svalue(h$obj), winslash = "/")
   try(load(tmpfile))
   project_file <<- pr.gf$filename
-  svalue(wf.ge) <- project_file
+  svalue(pr.ge) <- project_file
+
+  # Studies
   studies.gdf[,] <- studies.df 
-  ds.cur <<- "1"
+
+  # Datasets
+  ds.cur <<- ds.cur
   ds <<- ds
   update_ds.df()
   ds.gtable[,] <- ds.df
   update_ds_editor()
-  m.cur <<- "1"
+
+  # Models
+  m.cur <<- ds.cur
   m <<- m
   update_m.df()
   m.gtable[,] <- m.df
   update_m_editor()
+
+  # Fits
+  f.cur <<- f.cur
+  f <<- f
+  s <<- s
+  if (length(f) > 0) update_f.df()
+  else f.df <- f.df.empty
+  f.gtable[,] <- f.df
+  update_plotting_and_fitting()
 }
 save_to_file_handler <- function(h, ...)
 {
    studies.df <- data.frame(studies.gdf[,], stringsAsFactors = FALSE)
-   save(studies.df, ds, m, file = project_file)
+   save(studies.df, ds, ds.cur, m, m.cur, f, s, f.cur, file = project_file)
    galert(paste("Saved project contents to", project_file), parent = w)
 }
-# Project data management GUI elements {{{2
-pr.vg <- ggroup(cont = prg, horizontal = FALSE)
-pr.hg <- ggroup(cont = pr.vg, horizontal = TRUE)
-pr.gf <- gfile(text = "Select project file", cont = pr.hg,
-               handler = upload_file_handler)
-pr.vg2 <- ggroup(cont = pr.hg, horizontal = FALSE)
-pr.hg2 <- ggroup(cont = pr.vg2, horizontal = TRUE)
-glabel("Current project file name is", cont = pr.hg2)
 change_project_file_handler = function(h, ...) {
   project_file <<- as.character(svalue(h$obj))
 }
-wf.ge <- gedit(project_file, cont = pr.hg2, 
+# Project data management GUI elements {{{2
+pr.gf <- gfile(text = "Select project file", cont = prg,
+               handler = upload_file_handler)
+pr.ge <- gedit(project_file, cont = prg, 
                handler = change_project_file_handler)
-
-gbutton("Save current project contents to this file", cont = pr.vg2,
+# The save button is always visible {{{1
+gbutton("Save current project contents", cont = left,
         handler = save_to_file_handler)
 
-# Expandable group for studies {{{1
-stg <- gexpandgroup("Studies", cont = g)
+# GUI widgets and a function for Studies {{{1
+stg <- gexpandgroup("Studies", cont = left)
+visible(stg) <- FALSE
 update_study_selector <- function(h, ...) {
   delete(ds.e.1, ds.study.gc)
   ds.study.gc <<- gcombobox(paste("Study", studies.gdf[,1]), cont = ds.e.1) 
   svalue(ds.study.gc, index = TRUE) <- ds[[ds.cur]]$study_nr
 }
-studies.gdf <- gdf(studies.df, name = "Studies in the project",
-                   width = 500, height = 200, cont = stg)
+studies.gdf <- gdf(studies.df, name = "Edit studies in the project",
+                   width = 290, height = 200, cont = stg)
 studies.gdf$set_column_width(1, 40)
-studies.gdf$set_column_width(2, 200)
+studies.gdf$set_column_width(2, 240)
 addHandlerChanged(studies.gdf, update_study_selector)
-
 # Datasets and models {{{1
-dsm <- gframe("Datasets and models - double click to edit", cont = g,
-              horizontal = TRUE)
- 
+dsm <- gframe("Datasets and models", cont = left, horizontal = FALSE)
 # Dataset table with handler {{{2
 ds.switcher <- function(h, ...) {
   ds.cur <<- as.character(svalue(h$obj))
   update_ds_editor()
-  visible(dse) <- TRUE
-  visible(me) <- FALSE
+  svalue(center) <- 1
 }
-ds.gtable <- gtable(ds.df, multiple = TRUE, cont = dsm)
+ds.gtable <- gtable(ds.df, width = 290, cont = dsm)
 addHandlerDoubleClick(ds.gtable, ds.switcher)
 size(ds.gtable) <- list(columnWidths = c(40, 200, 40))
+ds.gtable$value <- 1
 
 # Model table with handler {{{2
 m.switcher <- function(h, ...) {
   m.cur <<- as.character(svalue(h$obj))
   update_m_editor()
-  visible(dse) <- FALSE
-  visible(me) <- TRUE
+  svalue(center) <- 2
 }
-m.gtable <- gtable(m.df, multiple = TRUE, cont = dsm)
+m.gtable <- gtable(m.df, width = 290, cont = dsm)
 addHandlerDoubleClick(m.gtable, m.switcher)
-size(m.gtable) <- list(columnWidths = c(40, 200))
+size(m.gtable) <- list(columnWidths = c(40, 240))
+m.gtable$value <- 1
 
-# Section for selecting datasets and model {{{2
-dsmsel <- gvbox(cont = dsm)
-show_plot <- function(ds.i, type) {
-  m.i <- as.character(svalue(f.gg.sel[[ds.i]], index = TRUE))
-  ow <- options("warn")
-  options(warn = -1)
-  Parameters <- f.gg.parms[[ds.i]][,]
-  Parameters.de <- subset(Parameters, Type == "deparm", type)
-  stateparms <- subset(Parameters, Type == "state")[[type]]
-  deparms <- as.numeric(Parameters.de[[type]])
-  names(deparms) <- rownames(Parameters.de)
-  if (type == "Initial") {
-    f[[ds.i]][[m.i]] <- mkinfit(m[[m.i]], override(ds[[ds.i]]$data),
-                                 state.ini = stateparms,
-                                 parms.ini = deparms,
-                                 err = "err", control.modFit = list(maxiter = 0))
+# Button for setting up a fit for the selected dataset and model
+gbutton("Configure fit for selected model and dataset", cont = dsm, 
+        handler = function(h, ...) {
+          ds.i <<- as.character(svalue(ds.gtable))
+          m.i <<- as.character(svalue(m.gtable))
+          ftmp <<- suppressWarnings(mkinfit(m[[m.i]],
+                                            override(ds[[ds.i]]$data),
+                                            err = "err", 
+                                            control.modFit = list(maxiter = 0)))
+          ftmp$ds.index <<- ds.i
+          ftmp$ds <<- ds[[ds.i]]
+          update_f.df()
+          f.gtable[,] <<- f.df
+          stmp <<- summary(ftmp)
+          svalue(pf) <- paste0("Dataset ", ds.i, ", Model ", m[[m.i]]$name)
+          show_plot("Initial", default = TRUE)
+          svalue(f.gg.opts.st) <<- "auto"
+          f.gg.parms[,] <- get_Parameters(stmp, FALSE)
+          svalue(center) <- 3
+        })
+
+# Fits {{{1
+f.gf <- gframe("Fits", cont = left, horizontal = FALSE)
+# Fit table with handler {{{2
+f.switcher <- function(h, ...) {
+  if (svalue(h$obj) != "0") {
+    f.cur <<- svalue(h$obj)
+    ftmp <<- f[[f.cur]]
+    stmp <<- f[[f.cur]]
+    ds.i <<- ftmp$ds.index
+    update_plotting_and_fitting()
   }
-
-  options(ow)
-  tmp <- get_tempfile(ext=".svg")
-  svg(tmp, width = 7, height = 5)
-  plot(f[[ds.i]][[m.i]], main = ds[[ds.i]]$title,
-       xlab = ifelse(ds[[ds.i]]$time_unit == "", "Time", 
-                     paste("Time in", ds[[ds.i]]$time_unit)),
-       ylab = ifelse(ds[[ds.i]]$unit == "", "Observed", 
-                     paste("Observed in", ds[[ds.i]]$unit)))
-  dev.off()
-  svalue(plots[[ds.i]]) <<- tmp
+  svalue(center) <- 3
 }
-get_Parameters <- function(stmp, optimised)
-{
-  pars <- rbind(stmp$start[1:2], stmp$fixed)
+f.gtable <- gtable(f.df, width = 290, cont = f.gf)
+addHandlerDoubleClick(f.gtable, f.switcher)
+size(f.gtable) <- list(columnWidths = c(40, 60, 180))
 
-  pars$fixed <- c(rep(FALSE, length(stmp$start$value)),
-                  rep(TRUE, length(stmp$fixed$value)))
-  pars$name <- rownames(pars)
-  Parameters <- data.frame(Name = pars$name,
-                           Type = pars$type,
-                           Initial = pars$value,
-                           Fixed = pars$fixed,
-                           Optimised = as.numeric(NA))
-  Parameters <- rbind(subset(Parameters, Type == "state"),
-                      subset(Parameters, Type == "deparm"))
-  rownames(Parameters) <- Parameters$Name
-  if (optimised) {
-    Parameters[rownames(stmp$bpar), "Optimised"] <- stmp$bpar[, "Estimate"]
-  }
-  return(Parameters)
-}
-run_fit <- function(ds.i) {
-  m.i <- as.character(svalue(f.gg.sel[[ds.i]], index = TRUE))
-  Parameters <- f.gg.parms[[ds.i]][,]
-  Parameters.de <- subset(Parameters, Type == "deparm")
-  deparms <- Parameters.de$Initial
-  names(deparms) <- rownames(Parameters.de)
-  f[[ds.i]][[m.i]] <- mkinfit(m[[m.i]], override(ds[[ds.i]]$data),
-                              state.ini = subset(Parameters,
-                                                 Type == "state")$Initial,
-                              parms.ini = deparms, 
-                              err = "err")
-  s[[ds.i]][[m.i]] <- summary(f[[ds.i]][[m.i]])
-  f.gg.parms[[ds.i]][,] <- get_Parameters(s[[ds.i]][[m.i]], TRUE)
-  show_plot(ds.i, "Optimised")
-}
-select_model_handler <- function(h, ...) {
-  m.i <- as.character(svalue(h$obj, index = TRUE))
-  if (is.null(f[[ds.i]][[m.i]])) {
-    f[[ds.i]][[m.i]] <<- mkinfit(m[[m.i]], override(ds[[ds.i]]$data),
-                                err = "err", control.modFit = list(maxiter = 0))
-  }
-  if (is.na(f.gg.parms[[ds.i]][1, "Optimised"])) {
-    f.gg.parms[[ds.i]][,] <- get_Parameters(summary(f[[ds.i]][[m.i]]), FALSE)
-    show_plot(ds.i, "Initial")
-  } else {
-    f.gg.parms[[ds.i]][,] <- get_Parameters(s[[ds.i]][[m.i]], TRUE)
-    show_plot(ds.i, "Optimised")
-  }
-}
-show_fit_config <- function(ds.i) {
-  ftmp <- f[[ds.i]][["1"]]
-  stmp <- summary(ftmp)
-  Parameters <- get_Parameters(stmp, FALSE)
-  f.gg[[ds.i]] <<- gvbox(cont = prows[[ds.i]])
-
-  f.gg.head <- ggroup(cont = f.gg[[ds.i]])
-  f.gg.sel[[ds.i]] <- gcombobox(m.df$Name, sel = 1, cont = f.gg.head,
-                                handler = select_model_handler)
-  gbutton("Show initial", 
-          handler = function(h, ...) show_plot(ds.i, "Initial"),
-          cont = f.gg.head)
-  gbutton("Run", handler = function(h, ...) run_fit(ds.i),
-          cont = f.gg.head)
-
-  f.gg.rest <- ggroup(cont = f.gg[[ds.i]])
-  f.gg.parms[[ds.i]] <<- gdf(Parameters, width = 420, height = 300,
-                             cont = f.gg.rest, 
-                             do_add_remove_buttons = FALSE)
-  f.gg.parms[[ds.i]]$set_column_width(1, 200)
-  f.gg.parms[[ds.i]]$set_column_width(2, 50)
-  f.gg.parms[[ds.i]]$set_column_width(3, 60)
-  f.gg.parms[[ds.i]]$set_column_width(4, 50)
-  f.gg.parms[[ds.i]]$set_column_width(5, 60)
-
-  f.gg.opts[[ds.i]] <<- gformlayout(cont = f.gg.rest)
-  solution_types <- character()
-  if (length(ftmp$mkinmod$map) == 1) solution_types <- "analytical"
-  if (is.matrix(ftmp$mkinmod$coefmat)) solution_types <- c(solution_types, "eigen")
-  solution_types <- c(solution_types, "deSolve")
-
-  gcombobox(solution_types, selected = 1, 
-            label = "solution_type", 
-            cont = f.gg.opts[[ds.i]])
-}
-#configure_fits_handler <- function(h, ...) {
-#  ds.sel <- as.character(svalue(ds.gtable))
-#  m.sel <- as.character(svalue(m.gtable))
-#}
-#dsconfig <- gbutton("Configure fits for selections", cont = dsmsel, 
-#                  handler = configure_fits_handler)
- 
-# Expandable group for the dataset editor {{{1
-dse <- gexpandgroup("Dataset editor", cont = g, horizontal = FALSE)
-visible(dse) <- FALSE
-
+# Dataset editor {{{1
+ds.editor <- gframe("Dataset 1", horizontal = FALSE, cont = center, label = "Dataset editor")
 # Handler functions {{{3
 copy_dataset_handler <- function(h, ...) {
   ds.old <- ds.cur
@@ -331,15 +266,10 @@ copy_dataset_handler <- function(h, ...) {
   ds[[ds.cur]] <<- ds[[ds.old]]
   update_ds.df()
   ds.gtable[,] <- ds.df
-  prows[[ds.cur]] <<- ggroup(cont = pfv)
-  plots[[ds.cur]] <<- gsvg(svg_plot(ds.cur), 
-                        container = prows[[ds.cur]], 
-                        width = 490, height = 350)
 }
  
 delete_dataset_handler <- function(h, ...) {
   ds[[ds.cur]] <<- NULL
-  delete(pfv, prows[[ds.cur]])
   names(ds) <<- names(plots) <<- names(prows) <<- as.character(1:length(ds))
   ds.cur <<- names(ds)[[1]]
   update_ds.df()
@@ -369,10 +299,6 @@ new_dataset_handler <- function(h, ...) {
   update_ds.df()
   ds.gtable[,] <- ds.df
   update_ds_editor()
-  prows[[ds.cur]] <<- ggroup(cont = pfv)
-  plots[[ds.cur]] <<- gsvg(svg_plot(ds.cur), 
-                        container=prows[[ds.cur]], 
-                        width = 490, height = 350)
 }
 
 empty_grid_handler <- function(h, ...) {
@@ -389,7 +315,7 @@ empty_grid_handler <- function(h, ...) {
   ds.e.gdf[,] <- new.data
 }
 
-save_ds_changes_handler <- function(h, ...) {
+keep_ds_changes_handler <- function(h, ...) {
   ds[[ds.cur]]$title <<- svalue(ds.title.ge)
   ds[[ds.cur]]$study_nr <<- as.numeric(gsub("Study ", "", svalue(ds.study.gc)))
   update_ds.df()
@@ -403,12 +329,9 @@ save_ds_changes_handler <- function(h, ...) {
   ds[[ds.cur]]$replicates <<- max(aggregate(tmpd$time, 
                                             list(tmpd$time, tmpd$name), length)$x)
   update_ds_editor()
-  update_plot()
 }
  
-
 # Widget setup {{{3
-ds.editor <- gframe("Dataset 1", horizontal = FALSE, cont = dse)
 # Line 1 {{{4
 ds.e.1 <- ggroup(cont = ds.editor, horizontal = TRUE)
 glabel("Title: ", cont = ds.e.1) 
@@ -428,7 +351,7 @@ ds.e.forms <- ggroup(cont= ds.editor, horizontal = TRUE)
 ds.e.3a <- gvbox(cont = ds.e.forms)
 ds.e.3a.gfl <- gformlayout(cont = ds.e.3a)
 ds.e.st  <- gedit(paste(ds[[ds.cur]]$sampling_times, collapse = ", "),
-                  width = 50,
+                  width = 40,
                   label = "Sampling times", 
                   cont = ds.e.3a.gfl)
 ds.e.stu <- gedit(ds[[ds.cur]]$time_unit, 
@@ -449,15 +372,13 @@ ds.e.obu <- gedit(ds[[ds.cur]]$unit,
 gbutton("Generate empty grid for kinetic data", cont = ds.e.3b, 
         handler = empty_grid_handler)
 
-# Save button {{{4
-gbutton("Save changes", cont = ds.editor, handler = save_ds_changes_handler)
+# Keep button {{{4
+gbutton("Keep changes", cont = ds.editor, handler = keep_ds_changes_handler)
 
 # Kinetic Data {{{4
 ds.e.gdf <- gdf(ds[[ds.cur]]$data, name = "Kinetic data", 
-                width = 700, height = 700, cont = ds.editor)
+                width = 500, height = 700, cont = ds.editor)
 ds.e.gdf$set_column_width(2, 70)
-enter_next_value_handler <- function(h, ...) galert("next value", parent = w)
-addHandlerChanged(ds.e.gdf, enter_next_value_handler)
 
 # Update the dataset editor {{{3
 update_ds_editor <- function() {
@@ -473,11 +394,8 @@ update_ds_editor <- function() {
 
   ds.e.gdf[,] <- ds[[ds.cur]]$data
 }
-
-# Expandable group for the model editor {{{1
-me <- gexpandgroup("Model editor", cont = g, horizontal = FALSE)
-visible(me) <- FALSE
-
+# Model editor {{{1
+m.editor <- gframe("Model 1", horizontal = FALSE, cont = center, label = "Model editor")
 # Handler functions {{{3
 copy_model_handler <- function(h, ...) {
   m.old <- m.cur
@@ -518,7 +436,7 @@ remove_compound_handler <- function(h, ...) {
   update_m_editor()
 }
 
-save_m_changes_handler <- function(h, ...) {
+keep_m_changes_handler <- function(h, ...) {
   spec <- list()
   for (obs.i in 1:length(m.e.rows)) {
     spec[[obs.i]] <- list(type = svalue(m.e.type[[obs.i]]),
@@ -535,7 +453,6 @@ save_m_changes_handler <- function(h, ...) {
 }
  
 # Widget setup {{{3
-m.editor <- gframe("Model 1", horizontal = FALSE, cont = me)
 m.e.0 <- ggroup(cont = m.editor, horizontal = TRUE)
 glabel("Model name: ", cont = m.e.0) 
 m.name.ge <- gedit(m[[m.cur]]$name, cont = m.e.0) 
@@ -549,7 +466,7 @@ gbutton("Copy model", cont = m.e.b, handler = copy_model_handler)
 gbutton("Delete model", cont = m.e.b, handler = delete_model_handler)
 gbutton("Add transformation product", cont = m.e.b, 
         handler = add_observed_handler)
-gbutton("Save changes", cont = m.e.b, handler = save_m_changes_handler)
+gbutton("Keep changes", cont = m.e.b, handler = keep_m_changes_handler)
 
 
 m.observed <- names(m[[m.cur]]$spec)
@@ -594,52 +511,162 @@ update_m_editor <- function() {
 
 # 3}}}
 # 2}}}
-# Plots and fits {{{1
-pf <- gframe("Plots and fitting", cont = g)
-pfv <- gvbox(cont = pf)
-prows <- plots <- list()
+# Plotting and fitting {{{1
+show_plot <- function(type, default = FALSE) {
+  Parameters <- f.gg.parms[,]
+  Parameters.de <- subset(Parameters, Type == "deparm", type)
+  stateparms <- subset(Parameters, Type == "state")[[type]]
+  deparms <- as.numeric(Parameters.de[[type]])
+  names(deparms) <- rownames(Parameters.de)
+  if (type == "Initial" & default == FALSE) {
+    ftmp <<- suppressWarnings(mkinfit(ftmp$mkinmod, 
+                                      override(ds[[ds.i]]$data),
+                                      state.ini = stateparms, 
+                                      parms.ini = deparms,
+                                      err = "err", 
+                                      control.modFit = list(maxiter = 0)))
+    ftmp$ds.index <<- ds.i
+    ftmp$ds <<- ds[[ds.i]]
+  } 
 
-svg_plot <- function(ds.i) {
-    d <- ds[[ds.i]]
-
-    f <- get_tempfile(ext=".svg")
-    svg(f, width = 7, height = 5)
-      plot(0, type = "n",
-           xlim = c(0, max(d$data$time, na.rm = TRUE)),
-           xlab = ifelse(d$time_unit == "", "Time",
-                         paste("Time in", d$time_unit)),
-           ylim = c(0, max(d$data$value, na.rm = TRUE)),
-           ylab = ifelse(d$unit == "", "Observed", 
-                         paste("Observed in", d$unit)),
-           main = d$title)
-      pointcolor = 1
-      for (obs_var in d$observed) {
-        points(subset(d$data, name == obs_var, c(time, value)), 
-               col = pointcolor)
-        pointcolor = pointcolor + 1
-      }
-      legend("topright", inset = c(0.05, 0.05), legend = d$observed,
-             pch = 1, col = 1:length(d$observed))
-    dev.off()
-    return(f)
+  tmp <- get_tempfile(ext=".svg")
+  svg(tmp, width = 7, height = 5)
+  plot(ftmp, main = ftmp$ds$title,
+       xlab = ifelse(ftmp$ds$time_unit == "", "Time", 
+                     paste("Time in", ftmp$ds$time_unit)),
+       ylab = ifelse(ds[[ds.i]]$unit == "", "Observed", 
+                     paste("Observed in", ftmp$ds$unit)))
+  dev.off()
+  svalue(plot.gs) <<- tmp
 }
+get_Parameters <- function(stmp, optimised)
+{
+  pars <- rbind(stmp$start[1:2], stmp$fixed)
 
-# Show the plots and the fit configuration
-for (ds.i in 1:length(ds)) {
-  ds.plot <- as.character(ds.i)
-  prows[[ds.plot]] <- ggroup(cont = pfv)
-  plots[[ds.plot]] <- gsvg(svg_plot(ds.plot), 
-                        container=prows[[ds.plot]], 
-                        width = 490, height = 350)
-
- f[[ds.plot]][["1"]] <- mkinfit(m[["1"]], override(ds[[ds.plot]]$data), 
-                                 err = "err", control.modFit = list(maxiter = 0))
- show_fit_config(ds.i)
+  pars$fixed <- c(rep(FALSE, length(stmp$start$value)),
+                  rep(TRUE, length(stmp$fixed$value)))
+  pars$name <- rownames(pars)
+  Parameters <- data.frame(Name = pars$name,
+                           Type = pars$type,
+                           Initial = pars$value,
+                           Fixed = pars$fixed,
+                           Optimised = as.numeric(NA))
+  Parameters <- rbind(subset(Parameters, Type == "state"),
+                      subset(Parameters, Type == "deparm"))
+  rownames(Parameters) <- Parameters$Name
+  if (optimised) {
+    Parameters[rownames(stmp$bpar), "Optimised"] <- stmp$bpar[, "Estimate"]
+  }
+  return(Parameters)
 }
-
-update_plot <- function() {
-  svalue(plots[[ds.cur]]) <<- svg_plot(ds.cur)
+run_fit <- function() {
+  Parameters <- f.gg.parms[,]
+  Parameters.de <- subset(Parameters, Type == "deparm")
+  deparms <- Parameters.de$Initial
+  names(deparms) <- Parameters.de$Name
+  defixed <- names(deparms[Parameters.de$Fixed])
+  Parameters.ini <- subset(Parameters, Type == "state")
+  iniparms <- Parameters.ini$Initial
+  names(iniparms) <- sub("_0", "", Parameters.ini$Name)
+  inifixed <- names(iniparms[Parameters.ini$Fixed])
+  ftmp <<- mkinfit(ftmp$mkinmod, override(ds[[ds.i]]$data),
+                   state.ini = iniparms,
+                   fixed_initials = inifixed,
+                   parms.ini = deparms, 
+                   fixed_parms = defixed,
+                   solution_type = svalue(f.gg.opts.st),
+                   err = "err")
+  ftmp$ds.index <<- ds.i
+  ftmp$ds <<- ds[[ds.i]]
+  stmp <<- summary(ftmp)
+  show_plot("Optimised")
+  svalue(f.gg.opts.st) <- ftmp$solution_type
+  f.gg.parms[,] <- get_Parameters(stmp, TRUE)
 }
+ds.i <- m.i <- "1"
+f.cur <- "0"
 
-# 1}}}
-# vim: set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
+# GUI widgets {{{2
+pf <- gframe("Dataset 1, Model SFO", horizontal = FALSE, 
+             cont = center, label = "Plotting and fitting")
+
+# Mid group with plot and options {{{3
+f.gg.mid <- ggroup(cont = pf)
+ftmp <- suppressWarnings(mkinfit(m[[m.cur]], override(ds[[ds.i]]$data), 
+                                 err = "err", 
+                                 control.modFit = list(maxiter = 0)))
+ftmp$ds.index = ds.i
+ftmp$ds = ds[[ds.i]]
+stmp <- summary(ftmp)
+Parameters <- get_Parameters(stmp, FALSE)
+tf <- get_tempfile(ext=".svg")
+svg(tf, width = 7, height = 5)
+plot(ftmp)
+dev.off()
+plot.gs <- gsvg(tf, container = f.gg.mid, width = 490, height = 350)
+f.gg.opts <- gformlayout(cont = f.gg.mid)
+solution_types <- c("auto", "analytical", "eigen", "deSolve")
+f.gg.opts.st <- gcombobox(solution_types, selected = 1, 
+                          label = "solution_type", width = 200, 
+                          cont = f.gg.opts)
+
+# Dataframe with initial and optimised parameters {{{3
+f.gg.parms <- gdf(Parameters, width = 420, height = 300, cont = pf, 
+                   do_add_remove_buttons = FALSE)
+f.gg.parms$set_column_width(1, 200)
+f.gg.parms$set_column_width(2, 50)
+f.gg.parms$set_column_width(3, 60)
+f.gg.parms$set_column_width(4, 50)
+f.gg.parms$set_column_width(5, 60)
+
+# Row with buttons {{{3
+f.gg.buttons <- ggroup(cont = pf)
+show.initial.gb <- gbutton("Show initial", 
+                           handler = function(h, ...) show_plot("Initial"),
+                           cont = f.gg.buttons)
+tooltip(show.initial.gb) <- "Show model with current inital settings for current dataset"
+run.fit.gb <- gbutton("Run", 
+                      handler = function(h, ...) run_fit(), cont =
+                      f.gg.buttons)
+tooltip(run.fit.gb) <- "Fit with current settings on the current dataset, with the original model"
+keep.fit.gb <- gbutton("Keep", 
+                       handler = function(h, ...) {
+                            f.cur <<- as.character(length(f) + 1)
+                            f[[f.cur]] <<- ftmp
+                            s[[f.cur]] <<- stmp
+                            update_f.df()
+                            f.gtable[,] <<- f.df
+                          }, cont = f.gg.buttons)
+tooltip(keep.fit.gb) <- "Store the optimised model with all settings and the current dataset in the fit list"
+
+delete.fit.gb <- gbutton("Delete", handler = function(h, ...) {
+          if (length(f) > 0) {
+            f[[f.cur]] <<- NULL
+            s[[f.cur]] <<- NULL
+          }
+          if(length(f) > 1) {
+            names(f) <<- as.character(1:length(f))
+            names(s) <<- as.character(1:length(f))
+            update_f.df()
+            f.cur <<- "1"
+            ftmp <<- f[[f.cur]]
+            stmp <<- f[[f.cur]]
+            ds.i <<- ftmp$ds.index
+            update_plotting_and_fitting()
+          } else {
+            f.df <<- f.df.empty
+            f.cur <<- "0"
+          }
+          f.gtable[,] <<- f.df
+        }, cont = f.gg.buttons)
+tooltip(delete.fit.gb) <- "Delete the currently loaded fit from the fit list"
+
+# Update the plotting and fitting area {{{3
+update_plotting_and_fitting <- function() {
+  svalue(pf) <- paste0("Fit ", f.cur, ": Dataset ", ftmp$ds.index, 
+                       ", Model ", ftmp$mkinmod$name)
+  show_plot("Optimised")  
+  svalue(f.gg.opts.st) <- ftmp$solution_type
+  f.gg.parms[,] <- get_Parameters(stmp, TRUE)
+}
+# vim: set foldmethod=marker ts=2 sw=2 expandtab: {{{1

@@ -4,6 +4,7 @@
 ### code chunk number 1: setup
 ###################################################
 options(prompt = "R> ")
+options(width = 70)
 options(SweaveHooks = list(
   cex = function() par(cex.lab = 1.3, cex.axis = 1.3)))
 
