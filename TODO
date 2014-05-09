@@ -1,15 +1,14 @@
 TODO for version 1.0
-- Transfer (some?) unit tests to examples to make them more easily accessible
-  for the user - they will be tested during R CMD check anyway
-- Let mkin call mkin_wide_to_long automatically, if observed data are suitably defined
 - Think about what a user would expect from version 1.0
-- Check the chi2 error calculation in mkinerrmin.R. KinGUII does this without iteration
+- Support model definitions without pathway to sink in combination with
+  formation fractions
+- Complete the main package vignette named mkin to include a method description
+- Calculate pseudoDT50 values as recommended by FOCUS
+- Improve formatting of differential equations in the summary
 
 Nice to have:
-- Improve choice of starting parameters, in order to avoid failure of eigenvalue based solutions
-  due to singular matrix
-- Consider reverting to deSolve in case eigenvalue based solution fails due to singular matrix
-- Calculate confidence intervals for DT50 and DT90 values when only one parameter is involved
-- Calculate transformation only DT50 values (exclude pathways to sink) as additional information
+- Calculate confidence intervals for DT50 and DT90 values when only one
+  parameter is involved
+- Calculate transformation only DT50 values (exclude pathways to sink) as
+  additional information
 - Calculate DT50 values from smaller rate constant/eigenvalue of DFOP, HS and SFORB models
-- Document assumptions and implications of fitting method used in FME in the package vignette

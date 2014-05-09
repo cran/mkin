@@ -1,6 +1,6 @@
 # $Id: runit.mkinfit.R 68 2010-09-09 22:40:04Z jranke $
 
-# Copyright (C) 2010-2012 Johannes Ranke
+# Copyright (C) 2010-2013 Johannes Ranke
 # Contact: jranke@uni-bremen.de
 
 # This file is part of the R package mkin
@@ -101,7 +101,6 @@ test.FOCUS_2006_DFOP <- function()
 
   # FOCUS_2006_A
   fit.A.DFOP <- mkinfit(DFOP, FOCUS_2006_A, quiet=TRUE)
-  fit.A.DFOP <- mkinfit(DFOP, FOCUS_2006_A, quiet=TRUE, plot=TRUE)
 
   median.A.DFOP <- as.numeric(lapply(subset(FOCUS_2006_DFOP_ref_A_to_B, dataset == "A", 
                    c(M0, k1, k2, f, DT50, DT90)), "median"))
@@ -289,7 +288,7 @@ test.mkinfit.schaefer07_complex_example <- function()
     s$distimes["A2", "DT50"])
   r$means <- (r$KinGUI + r$ModelMaker)/2
   r$mkin.deviation <- abs(round(100 * ((r$mkin - r$means)/r$means), digits=1))
-  checkIdentical(r$mkin.deviation < 10, rep(TRUE, length(r$mkin.deviation)))
+  checkIdentical(r$mkin.deviation[1:11] < 10, rep(TRUE, 11))
 } # }}}
 
 # vim: set foldmethod=marker ts=2 sw=2 expandtab:

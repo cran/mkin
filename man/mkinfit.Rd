@@ -20,8 +20,11 @@ mkinfit(mkinmod, observed,
   state.ini = c(100, rep(0, length(mkinmod$diffs) - 1)), 
   fixed_parms = NULL, fixed_initials = names(mkinmod$diffs)[-1], 
   solution_type = "auto",
+  method.ode = "lsoda",
   method.modFit = "Marq",
   control.modFit = list(),
+  transform_rates = TRUE,
+  transform_fractions = TRUE,
   plot = FALSE, quiet = FALSE, err = NULL, weight = "none", 
   scaleVar = FALSE, 
   atol = 1e-8, rtol = 1e-10, n.outtimes = 100, 
@@ -85,6 +88,11 @@ mkinfit(mkinmod, observed,
     dependence of degradation rates and metabolites). This argument is passed
     on to the helper function \code{\link{mkinpredict}}.
   }
+  \item{method.ode}{
+    The solution method passed via \code{\link{mkinpredict}} to
+    \code{\link{ode}} in case the solution type is "deSolve". The default
+    "lsoda" is performant, but sometimes fails to converge.
+  }
   \item{method.modFit}{
     The optimisation method passed to \code{\link{modFit}}. The default "Marq"
     is the Levenberg Marquardt algorithm \code{\link{nls.lm}} from the package
@@ -95,6 +103,23 @@ mkinfit(mkinmod, observed,
   \item{control.modFit}{
     Additional arguments passed to the optimisation method used by
     \code{\link{modFit}}.
+  }
+  \item{transform_rates}{
+    Boolean specifying if kinetic rate constants should be transformed in the
+    model specification used in the fitting for better compliance with the
+    assumption of normal distribution of the estimator. If TRUE, also 
+    alpha and beta parameters of the FOMC model are log-transformed, as well 
+    as k1 and k2 rate constants for the DFOP and HS models.
+    If TRUE, zero is used as a lower bound for the rates in the optimisation.
+  }
+  \item{transform_fractions}{
+    Boolean specifying if formation fractions constants should be transformed in the
+    model specification used in the fitting for better compliance with the
+    assumption of normal distribution of the estimator. The default (TRUE) is 
+    to do transformations. The g parameter of the DFOP and HS models are also 
+    transformed, as they can also be seen as compositional data. The
+    transformation used for these transformations is the \code{\link{ilr}}
+    transformation.
   }
   \item{plot}{
     Should the observed values and the numerical solutions be plotted at each
