@@ -60,6 +60,7 @@ body, td {
 body {
   max-width: 800px;
   margin: auto;
+  padding: 1em;
   line-height: 20px;
 }
 
@@ -67,28 +68,28 @@ tt, code, pre {
    font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
 }
 
-h1 { 
-   font-size:2.2em; 
+h1 {
+   font-size:2.2em;
 }
 
-h2 { 
-   font-size:1.8em; 
+h2 {
+   font-size:1.8em;
 }
 
-h3 { 
-   font-size:1.4em; 
+h3 {
+   font-size:1.4em;
 }
 
-h4 { 
-   font-size:1.0em; 
+h4 {
+   font-size:1.0em;
 }
 
-h5 { 
-   font-size:0.9em; 
+h5 {
+   font-size:0.9em;
 }
 
-h6 { 
-   font-size:0.8em; 
+h6 {
+   font-size:0.8em;
 }
 
 a:visited {
@@ -132,54 +133,54 @@ hr {
 }
 
 @media print {
-   * { 
-      background: transparent !important; 
-      color: black !important; 
-      filter:none !important; 
-      -ms-filter: none !important; 
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
    }
 
-   body { 
-      font-size:12pt; 
-      max-width:100%; 
-   }
-       
-   a, a:visited { 
-      text-decoration: underline; 
+   body {
+      font-size:12pt;
+      max-width:100%;
    }
 
-   hr { 
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
       visibility: hidden;
       page-break-before: always;
    }
 
-   pre, blockquote { 
-      padding-right: 1em; 
-      page-break-inside: avoid; 
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
    }
 
-   tr, img { 
-      page-break-inside: avoid; 
+   tr, img {
+      page-break-inside: avoid;
    }
 
-   img { 
-      max-width: 100% !important; 
+   img {
+      max-width: 100% !important;
    }
 
-   @page :left { 
-      margin: 15mm 20mm 15mm 10mm; 
-   }
-     
-   @page :right { 
-      margin: 15mm 10mm 15mm 20mm; 
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
    }
 
-   p, h2, h3 { 
-      orphans: 3; widows: 3; 
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
    }
 
-   h2, h3 { 
-      page-break-after: avoid; 
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
    }
 }
 </style>
@@ -236,10 +237,10 @@ FOCUS report.</p>
 summary(m.L1.SFO)
 </code></pre>
 
-<pre><code>## mkin version:    0.9.27 
+<pre><code>## mkin version:    0.9.28 
 ## R version:       3.1.0 
-## Date of fit:     Fri May  9 16:15:19 2014 
-## Date of summary: Fri May  9 16:15:19 2014 
+## Date of fit:     Tue May 20 10:15:37 2014 
+## Date of summary: Tue May 20 10:15:37 2014 
 ## 
 ## Equations:
 ## [1] d_parent = - k_parent_sink * parent
@@ -330,10 +331,10 @@ is checked.</p>
 summary(m.L1.FOMC, data = FALSE)
 </code></pre>
 
-<pre><code>## mkin version:    0.9.27 
+<pre><code>## mkin version:    0.9.28 
 ## R version:       3.1.0 
-## Date of fit:     Fri May  9 16:15:20 2014 
-## Date of summary: Fri May  9 16:15:20 2014 
+## Date of fit:     Tue May 20 10:15:38 2014 
+## Date of summary: Tue May 20 10:15:38 2014 
 ## 
 ## Equations:
 ## [1] d_parent = - (alpha/beta) * ((time/beta) + 1)^-1 * parent
@@ -417,10 +418,10 @@ FOCUS_2006_L2_mkin &lt;- mkin_wide_to_long(FOCUS_2006_L2)
 summary(m.L2.SFO)
 </code></pre>
 
-<pre><code>## mkin version:    0.9.27 
+<pre><code>## mkin version:    0.9.28 
 ## R version:       3.1.0 
-## Date of fit:     Fri May  9 16:15:20 2014 
-## Date of summary: Fri May  9 16:15:20 2014 
+## Date of fit:     Tue May 20 10:15:38 2014 
+## Date of summary: Tue May 20 10:15:38 2014 
 ## 
 ## Equations:
 ## [1] d_parent = - k_parent_sink * parent
@@ -518,10 +519,10 @@ mkinresplot(m.L2.FOMC)
 <pre><code class="r">summary(m.L2.FOMC, data = FALSE)
 </code></pre>
 
-<pre><code>## mkin version:    0.9.27 
+<pre><code>## mkin version:    0.9.28 
 ## R version:       3.1.0 
-## Date of fit:     Fri May  9 16:15:20 2014 
-## Date of summary: Fri May  9 16:15:20 2014 
+## Date of fit:     Tue May 20 10:15:38 2014 
+## Date of summary: Tue May 20 10:15:38 2014 
 ## 
 ## Equations:
 ## [1] d_parent = - (alpha/beta) * ((time/beta) + 1)^-1 * parent
@@ -600,10 +601,10 @@ plot(m.L2.DFOP)
 <pre><code class="r">summary(m.L2.DFOP, data = FALSE)
 </code></pre>
 
-<pre><code>## mkin version:    0.9.27 
+<pre><code>## mkin version:    0.9.28 
 ## R version:       3.1.0 
-## Date of fit:     Fri May  9 16:15:21 2014 
-## Date of summary: Fri May  9 16:15:21 2014 
+## Date of fit:     Tue May 20 10:15:39 2014 
+## Date of summary: Tue May 20 10:15:39 2014 
 ## 
 ## Equations:
 ## [1] d_parent = - ((k1 * g * exp(-k1 * time) + k2 * (1 - g) * exp(-k2 * time)) / (g * exp(-k1 * time) + (1 - g) * exp(-k2 * time))) * parent
@@ -682,10 +683,10 @@ plot(m.L3.SFO)
 <pre><code class="r">summary(m.L3.SFO)
 </code></pre>
 
-<pre><code>## mkin version:    0.9.27 
+<pre><code>## mkin version:    0.9.28 
 ## R version:       3.1.0 
-## Date of fit:     Fri May  9 16:15:21 2014 
-## Date of summary: Fri May  9 16:15:21 2014 
+## Date of fit:     Tue May 20 10:15:39 2014 
+## Date of summary: Tue May 20 10:15:39 2014 
 ## 
 ## Equations:
 ## [1] d_parent = - k_parent_sink * parent
@@ -759,10 +760,10 @@ plot(m.L3.FOMC)
 <pre><code class="r">summary(m.L3.FOMC, data = FALSE)
 </code></pre>
 
-<pre><code>## mkin version:    0.9.27 
+<pre><code>## mkin version:    0.9.28 
 ## R version:       3.1.0 
-## Date of fit:     Fri May  9 16:15:21 2014 
-## Date of summary: Fri May  9 16:15:21 2014 
+## Date of fit:     Tue May 20 10:15:39 2014 
+## Date of summary: Tue May 20 10:15:39 2014 
 ## 
 ## Equations:
 ## [1] d_parent = - (alpha/beta) * ((time/beta) + 1)^-1 * parent
@@ -829,10 +830,10 @@ plot(m.L3.DFOP)
 <pre><code class="r">summary(m.L3.DFOP, data = FALSE)
 </code></pre>
 
-<pre><code>## mkin version:    0.9.27 
+<pre><code>## mkin version:    0.9.28 
 ## R version:       3.1.0 
-## Date of fit:     Fri May  9 16:15:21 2014 
-## Date of summary: Fri May  9 16:15:21 2014 
+## Date of fit:     Tue May 20 10:15:39 2014 
+## Date of summary: Tue May 20 10:15:39 2014 
 ## 
 ## Equations:
 ## [1] d_parent = - ((k1 * g * exp(-k1 * time) + k2 * (1 - g) * exp(-k2 * time)) / (g * exp(-k1 * time) + (1 - g) * exp(-k2 * time))) * parent
@@ -915,10 +916,10 @@ plot(m.L4.SFO)
 <pre><code class="r">summary(m.L4.SFO, data = FALSE)
 </code></pre>
 
-<pre><code>## mkin version:    0.9.27 
+<pre><code>## mkin version:    0.9.28 
 ## R version:       3.1.0 
-## Date of fit:     Fri May  9 16:15:22 2014 
-## Date of summary: Fri May  9 16:15:22 2014 
+## Date of fit:     Tue May 20 10:15:40 2014 
+## Date of summary: Tue May 20 10:15:40 2014 
 ## 
 ## Equations:
 ## [1] d_parent = - k_parent_sink * parent
@@ -981,10 +982,10 @@ plot(m.L4.FOMC)
 <pre><code class="r">summary(m.L4.FOMC, data = FALSE)
 </code></pre>
 
-<pre><code>## mkin version:    0.9.27 
+<pre><code>## mkin version:    0.9.28 
 ## R version:       3.1.0 
-## Date of fit:     Fri May  9 16:15:22 2014 
-## Date of summary: Fri May  9 16:15:22 2014 
+## Date of fit:     Tue May 20 10:15:40 2014 
+## Date of summary: Tue May 20 10:15:40 2014 
 ## 
 ## Equations:
 ## [1] d_parent = - (alpha/beta) * ((time/beta) + 1)^-1 * parent
