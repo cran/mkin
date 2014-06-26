@@ -1,4 +1,4 @@
-# $Id: ilr.R 30 2012-04-23 23:08:19Z jranke $
+# $Id$
 
 # Copyright (C) 2012 René Lehmann, Johannes Ranke
 # Contact: jranke@uni-bremen.de
