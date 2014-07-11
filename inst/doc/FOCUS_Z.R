@@ -42,20 +42,10 @@ summary(m.Z.2a.ff, data = FALSE)
 
 ## ----FOCUS_2006_Z_fits_3, echo=TRUE, fig.height=4------------------------
 Z.3 <- mkinmod(Z0 = list(type = "SFO", to = "Z1", sink = FALSE),
-               Z1 = list(type = "SFO"))
+               Z1 = list(type = "SFO"), use_of_ff = "max")
 m.Z.3 <- mkinfit(Z.3, FOCUS_2006_Z_mkin, quiet = TRUE)
 plot(m.Z.3)
 summary(m.Z.3, data = FALSE)
-
-
-## ----FOCUS_2006_Z_fits_3.ff, echo=TRUE, fig.height=4---------------------
-Z.3.ff <- mkinmod(Z0 = list(type = "SFO", to = "Z1"),
-               Z1 = list(type = "SFO"), use_of_ff = "max")
-m.Z.3.ff <- mkinfit(Z.3.ff, FOCUS_2006_Z_mkin, 
-                    parms.ini = c(f_Z0_to_Z1 = 1),
-                    fixed_parms = "f_Z0_to_Z1",
-                    quiet = TRUE)
-summary(m.Z.3.ff, data = FALSE)
 
 
 ## ----FOCUS_2006_Z_fits_5, echo=TRUE, fig.height=4------------------------
@@ -88,13 +78,12 @@ mkinresplot(m.Z.FOCUS, "Z3", lpos = "bottomright")
 
 
 ## ----FOCUS_2006_Z_fits_6_ff, echo=TRUE, fig.height=4---------------------
-Z.FOCUS.ff <- mkinmod(Z0 = list(type = "SFO", to = "Z1"),
-                   Z1 = list(type = "SFO", to = "Z2"),
+Z.FOCUS.ff <- mkinmod(Z0 = list(type = "SFO", to = "Z1", sink = FALSE),
+                   Z1 = list(type = "SFO", to = "Z2", sink = FALSE),
                    Z2 = list(type = "SFO", to = "Z3"),
-                   Z3 = list(type = "SFO"), use_of_ff = "max")
-m.Z.FOCUS.ff <- mkinfit(Z.FOCUS.ff, FOCUS_2006_Z_mkin,
-                        parms.ini = c(f_Z0_to_Z1 = 1),
-                        fixed_parms = c("f_Z0_to_Z1"), quiet = TRUE) 
+                   Z3 = list(type = "SFO"), 
+                   use_of_ff = "max")
+m.Z.FOCUS.ff <- mkinfit(Z.FOCUS.ff, FOCUS_2006_Z_mkin, quiet = TRUE)
 plot(m.Z.FOCUS.ff)
 summary(m.Z.FOCUS.ff, data = FALSE)
 
@@ -163,6 +152,10 @@ summary(m.Z.mkin.5a, data = FALSE)$bpar
 
 ## ----FOCUS_2006_Z_fits_11b, echo=TRUE------------------------------------
 mkinparplot(m.Z.mkin.5a)
+
+
+## ----FOCUS_2006_Z_fits_11b_endpoints, echo=TRUE--------------------------
+endpoints(m.Z.mkin.5a)
 
 
 ## ----FOCUS_2006_Z_residuals_11-------------------------------------------

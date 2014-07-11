@@ -1,4 +1,9 @@
 
+## ----, include = FALSE---------------------------------------------------
+library(knitr)
+opts_chunk$set(tidy = FALSE, cache = TRUE)
+
+
 ## ------------------------------------------------------------------------
 library("mkin")
 FOCUS_2006_L1 = data.frame(
