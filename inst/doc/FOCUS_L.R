@@ -15,13 +15,7 @@ FOCUS_2006_L1_mkin <- mkin_wide_to_long(FOCUS_2006_L1)
 
 
 ## ------------------------------------------------------------------------
-SFO <- mkinmod(parent = list(type = "SFO"))
-FOMC <- mkinmod(parent = list(type = "FOMC"))
-DFOP <- mkinmod(parent = list(type = "DFOP"))
-
-
-## ------------------------------------------------------------------------
-m.L1.SFO <- mkinfit(SFO, FOCUS_2006_L1_mkin, quiet=TRUE)
+m.L1.SFO <- mkinfit("SFO", FOCUS_2006_L1_mkin, quiet=TRUE)
 summary(m.L1.SFO)
 
 
@@ -34,7 +28,7 @@ mkinresplot(m.L1.SFO, ylab = "Observed", xlab = "Time")
 
 
 ## ------------------------------------------------------------------------
-m.L1.FOMC <- mkinfit(FOMC, FOCUS_2006_L1_mkin, quiet=TRUE)
+m.L1.FOMC <- mkinfit("FOMC", FOCUS_2006_L1_mkin, quiet=TRUE)
 summary(m.L1.FOMC, data = FALSE)
 
 
@@ -48,7 +42,7 @@ FOCUS_2006_L2_mkin <- mkin_wide_to_long(FOCUS_2006_L2)
 
 
 ## ------------------------------------------------------------------------
-m.L2.SFO <- mkinfit(SFO, FOCUS_2006_L2_mkin, quiet=TRUE)
+m.L2.SFO <- mkinfit("SFO", FOCUS_2006_L2_mkin, quiet=TRUE)
 summary(m.L2.SFO)
 
 
@@ -59,7 +53,7 @@ mkinresplot(m.L2.SFO)
 
 
 ## ----fig.height = 8------------------------------------------------------
-m.L2.FOMC <- mkinfit(FOMC, FOCUS_2006_L2_mkin, quiet = TRUE)
+m.L2.FOMC <- mkinfit("FOMC", FOCUS_2006_L2_mkin, quiet = TRUE)
 par(mfrow = c(2, 1))
 plot(m.L2.FOMC)
 mkinresplot(m.L2.FOMC)
@@ -67,12 +61,12 @@ summary(m.L2.FOMC, data = FALSE)
 
 
 ## ----fig.height = 5------------------------------------------------------
-m.L2.DFOP <- mkinfit(DFOP, FOCUS_2006_L2_mkin, quiet = TRUE)
+m.L2.DFOP <- mkinfit("DFOP", FOCUS_2006_L2_mkin, quiet = TRUE)
 plot(m.L2.DFOP)
 
 
 ## ----fig.height = 5------------------------------------------------------
-m.L2.DFOP <- mkinfit(DFOP, FOCUS_2006_L2_mkin, 
+m.L2.DFOP <- mkinfit("DFOP", FOCUS_2006_L2_mkin, 
   parms.ini = c(k1 = 1, k2 = 0.01, g = 0.8),
   quiet=TRUE)
 plot(m.L2.DFOP)
@@ -87,19 +81,19 @@ FOCUS_2006_L3_mkin <- mkin_wide_to_long(FOCUS_2006_L3)
 
 
 ## ----fig.height = 5------------------------------------------------------
-m.L3.SFO <- mkinfit(SFO, FOCUS_2006_L3_mkin, quiet = TRUE)
+m.L3.SFO <- mkinfit("SFO", FOCUS_2006_L3_mkin, quiet = TRUE)
 plot(m.L3.SFO)
 summary(m.L3.SFO)
 
 
 ## ----fig.height = 5------------------------------------------------------
-m.L3.FOMC <- mkinfit(FOMC, FOCUS_2006_L3_mkin, quiet = TRUE)
+m.L3.FOMC <- mkinfit("FOMC", FOCUS_2006_L3_mkin, quiet = TRUE)
 plot(m.L3.FOMC)
 summary(m.L3.FOMC, data = FALSE)
 
 
 ## ----fig.height = 5------------------------------------------------------
-m.L3.DFOP <- mkinfit(DFOP, FOCUS_2006_L3_mkin, quiet = TRUE)
+m.L3.DFOP <- mkinfit("DFOP", FOCUS_2006_L3_mkin, quiet = TRUE)
 plot(m.L3.DFOP)
 summary(m.L3.DFOP, data = FALSE)
 
@@ -112,13 +106,13 @@ FOCUS_2006_L4_mkin <- mkin_wide_to_long(FOCUS_2006_L4)
 
 
 ## ----fig.height = 5------------------------------------------------------
-m.L4.SFO <- mkinfit(SFO, FOCUS_2006_L4_mkin, quiet = TRUE)
+m.L4.SFO <- mkinfit("SFO", FOCUS_2006_L4_mkin, quiet = TRUE)
 plot(m.L4.SFO)
 summary(m.L4.SFO, data = FALSE)
 
 
 ## ----fig.height = 5------------------------------------------------------
-m.L4.FOMC <- mkinfit(FOMC, FOCUS_2006_L4_mkin, quiet = TRUE)
+m.L4.FOMC <- mkinfit("FOMC", FOCUS_2006_L4_mkin, quiet = TRUE)
 plot(m.L4.FOMC)
 summary(m.L4.FOMC, data = FALSE)
 
