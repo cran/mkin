@@ -1,0 +1,14 @@
+base
+colorout
+setwidth
+vimcom
+minpack.lm
+rootSolve
+mkin
+inline
+deSolve
+bvpSolve
+ccSolve
+microbenchmark
+rmarkdown
+knitr
