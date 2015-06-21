@@ -10,7 +10,8 @@ if several compartments are involved.
 You can install the latest released version from 
 [CRAN](http://cran.r-project.org/package=mkin) from within R:
 
-```s
+
+```r
 install.packages("mkin")
 ```
 
@@ -19,7 +20,8 @@ If looking for the latest features, you can install directly from
 Using `quick = TRUE` skips docs, multiple-architecture builds, demos, and
 vignettes, to make installation as fast and painless as possible.
 
-```s
+
+```r
 require(devtools)
 install_github("jranke/mkin", quick = TRUE)
 ```
@@ -37,38 +39,65 @@ detailed guidance and helpful tools have been developed as detailed in
 The simplest usage example that I can think of, using model shorthand notation
 (available since mkin 0.9-32) and a built-in dataset is
 
-    library(mkin)
-    fit <- mkinfit("SFO", FOCUS_2006_C)
-    plot(fit, show_residuals = TRUE) 
-    summary(fit)
+
+```r
+library(mkin)
+fit <- mkinfit("SFO", FOCUS_2006_C, quiet = TRUE)
+plot(fit, show_residuals = TRUE) 
+```
+
+![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
+
+
+```r
+# Output not shown in this README to avoid distraction
+summary(fit)
+```
 
 A still very simple usage example including the definition of the same data in R
 code would be
 
-    example_data = data.frame(
-      name = rep("parent", 9),
-      time = c(0, 1, 3, 7, 14, 28, 63, 91, 119),
-      value = c(85.1, 57.9, 29.9, 14.6, 9.7, 6.6, 4, 3.9, 0.6)
-    )
-    fit2 <- mkinfit("FOMC", example_data)
-    plot(fit2, show_residuals = TRUE) 
+
+```r
+example_data = data.frame(
+  name = rep("parent", 9),
+  time = c(0, 1, 3, 7, 14, 28, 63, 91, 119),
+  value = c(85.1, 57.9, 29.9, 14.6, 9.7, 6.6, 4, 3.9, 0.6)
+)
+fit2 <- mkinfit("FOMC", example_data, quiet = TRUE)
+plot(fit2, show_residuals = TRUE) 
+```
+
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
 
 A fairly complex usage example using another built-in dataset:
 
-    data <- mkin_wide_to_long(schaefer07_complex_case, time = "time")
 
-    model <- mkinmod(
-      parent = list(type = "SFO", to = c("A1", "B1", "C1"), sink = FALSE),
-      A1 = list(type = "SFO", to = "A2"),
-      B1 = list(type = "SFO"),
-      C1 = list(type = "SFO"),
-      A2 = list(type = "SFO"), use_of_ff = "max")
 
-    fit3 <- mkinfit(model, data, method.modFit = "Port")
 
-    plot(fit3, show_residuals = TRUE) 
-    summary(fit3)
-    mkinparplot(fit3)
+```r
+data <- mkin_wide_to_long(schaefer07_complex_case, time = "time")
+
+model <- mkinmod(
+  parent = mkinsub("SFO", c("A1", "B1", "C1"), sink = FALSE),
+  A1 = mkinsub("SFO", "A2"),
+  B1 = mkinsub("SFO"),
+  C1 = mkinsub("SFO"),
+  A2 = mkinsub("SFO"), use_of_ff = "max")
+
+fit3 <- mkinfit(model, data, method.modFit = "Port", quiet = TRUE)
+
+plot(fit3, show_residuals = TRUE) 
+```
+
+![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-1.png) 
+
+```r
+#summary(fit3) # Commented out to avoid distraction from README content
+mkinparplot(fit3)
+```
+
+![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-2.png) 
 
 For more examples and to see results, have a look at the examples provided in the
 [`mkinfit`](http://kinfit.r-forge.r-project.org/mkin_static/mkinfit.html)
@@ -89,7 +118,14 @@ documentation or the package vignettes referenced from the
   first-order (SFO) or SFORB kinetics are used in the model, or
   using a numeric solver from the `deSolve` package (default is `lsoda`).
   These have decreasing efficiency, and are automatically chosen 
-  by default.
+  by default. 
+* As of mkin 0.9-36, model solution for models with more than one observed
+  variable is based on the inline package.  This is even faster than eigenvalue
+  based solution, at least in the example shown in the
+  [vignette `compiled_models`](http://rawgit.com/jranke/mkin/master/vignettes/compiled_models.html).
+  The autogeneration of C code was
+  inspired by the [`ccSolve`](https://github.com/karlines/ccSolve) package. Thanks
+  to Karline Soetaert for her work on that.
 * Model optimisation with 
   [`mkinfit`](http://kinfit.r-forge.r-project.org/mkin_static/mkinfit.html)
   internally using the `modFit` function from the `FME` package,
@@ -108,6 +144,8 @@ documentation or the package vignettes referenced from the
   not include meaningless values like negative rate constants or 
   formation fractions adding up to more than 1, which can not occur in 
   a single experiment with a single defined radiolabel position.
+* The usual one-sided t-test for significant difference from zero is nevertheless
+  shown based on estimators for the untransformed parameters.
 * Summary and plotting functions. The `summary` of an `mkinfit` object is in
   fact a full report that should give enough information to be able to
   approximately reproduce the fit with other tools.
@@ -128,6 +166,10 @@ There is a graphical user interface that I consider useful for real work. Please
 refer to its [documentation page](http://kinfit.r-forge.r-project.org/gmkin_static)
 for installation instructions and a manual.
   
+## News
+
+Yes, there is a ![Changelog](NEWS.md).
+
 ## Credits and historical remarks
 
 `mkin` would not be possible without the underlying software stack consisting
