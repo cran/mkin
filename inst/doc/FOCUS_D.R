@@ -1,7 +1,6 @@
 ## ----, include = FALSE---------------------------------------------------
 library(knitr)
-library(methods)
-opts_chunk$set(tidy = FALSE, cache = FALSE)
+opts_chunk$set(tidy = FALSE, cache = TRUE)
 
 ## ------------------------------------------------------------------------
 library("mkin")
