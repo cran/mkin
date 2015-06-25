@@ -1,6 +1,6 @@
 ## ----include=FALSE--------------------------------------------------
 require(knitr)
-opts_chunk$set(engine='R', tidy=FALSE)
+opts_chunk$set(engine='R', tidy = FALSE, cache = TRUE)
 options(width=70)
 
 ## ----FOCUS_2006_Z_data, echo=TRUE, eval=TRUE------------------------
