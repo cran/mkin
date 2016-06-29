@@ -11,7 +11,7 @@ SFO_SFO <- mkinmod(
   parent = mkinsub("SFO", "m1"),
   m1 = mkinsub("SFO"))
 
-## ----benchmark_SFO_SFO---------------------------------------------------
+## ----benchmark_SFO_SFO, fig.height = 3-----------------------------------
 library("microbenchmark")
 library("ggplot2")
 mb.1 <- microbenchmark(
@@ -32,7 +32,7 @@ autoplot(mb.1)
 rownames(smb.1) <- smb.1$expr
 smb.1["median"]/smb.1["deSolve, compiled", "median"]
 
-## ----benchmark_FOMC_SFO--------------------------------------------------
+## ----benchmark_FOMC_SFO, fig.height = 3----------------------------------
 FOMC_SFO <- mkinmod(
   parent = mkinsub("FOMC", "m1"),
   m1 = mkinsub( "SFO"))
