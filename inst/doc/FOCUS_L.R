@@ -1,12 +1,12 @@
 ## ---- include = FALSE----------------------------------------------------
 library(knitr)
-opts_chunk$set(tidy = FALSE, cache = TRUE)
+opts_chunk$set(tidy = FALSE, cache = FALSE)
 
 ## ------------------------------------------------------------------------
 library("mkin", quietly = TRUE)
 FOCUS_2006_L1 = data.frame(
   t = rep(c(0, 1, 2, 3, 5, 7, 14, 21, 30), each = 2),
-  parent = c(88.3, 91.4, 85.6, 84.5, 78.9, 77.6, 
+  parent = c(88.3, 91.4, 85.6, 84.5, 78.9, 77.6,
              72.0, 71.9, 50.3, 59.4, 47.0, 45.1,
              27.7, 27.3, 10.0, 10.4, 2.9, 4.0))
 FOCUS_2006_L1_mkin <- mkin_wide_to_long(FOCUS_2006_L1)
@@ -36,7 +36,7 @@ FOCUS_2006_L2_mkin <- mkin_wide_to_long(FOCUS_2006_L2)
 
 ## ----fig.width = 7, fig.height = 6---------------------------------------
 m.L2.SFO <- mkinfit("SFO", FOCUS_2006_L2_mkin, quiet=TRUE)
-plot(m.L2.SFO, show_residuals = TRUE, show_errmin = TRUE, 
+plot(m.L2.SFO, show_residuals = TRUE, show_errmin = TRUE,
      main = "FOCUS L2 - SFO")
 
 ## ----fig.width = 7, fig.height = 6---------------------------------------
@@ -76,7 +76,7 @@ FOCUS_2006_L4_mkin <- mkin_wide_to_long(FOCUS_2006_L4)
 ## ----fig.height = 6------------------------------------------------------
 # Only use one core here, not to offend the CRAN checks
 mm.L4 <- mmkin(c("SFO", "FOMC"), cores = 1,
-               list("FOCUS L4" = FOCUS_2006_L4_mkin), 
+               list("FOCUS L4" = FOCUS_2006_L4_mkin),
                quiet = TRUE)
 plot(mm.L4)
 
