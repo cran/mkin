@@ -1,6 +1,6 @@
 # mkin
 
-[![](http://www.r-pkg.org/badges/version/mkin)](https://cran.r-project.org/package=mkin)
+[![](https://www.r-pkg.org/badges/version/mkin)](https://cran.r-project.org/package=mkin)
 
 The R package **mkin** provides calculation routines for the analysis of
 chemical degradation data, including <b>m</b>ulticompartment <b>kin</b>etics as
@@ -36,7 +36,9 @@ at the package vignettes
 
 ## Documentation
 
-The HTML documentation is available at [github](http://jranke.github.io/mkin) 
+The HTML documentation is available at 
+[jrwb.de](https://pkgdown.jrwb.de/mkin), at
+[github](http://jranke.github.io/mkin) 
 and at [R-Forge](http://kinfit.r-forge.r-project.org/mkin_static/index.html).
 
 ## Features
@@ -111,7 +113,7 @@ It could not have been written without me being introduced to regulatory fate
 modelling of pesticides by Adrian Gurney during my time at Harlan Laboratories
 Ltd (formerly RCC Ltd). `mkin` greatly profits from and largely follows
 the work done by the 
-[FOCUS Degradation Kinetics Workgroup](http://focus.jrc.ec.europa.eu/dk),
+[FOCUS Degradation Kinetics Workgroup](http://esdac.jrc.ec.europa.eu/projects/degradation-kinetics),
 as detailed in their guidance document from 2006, slightly updated in 2011 and
 in 2014.
 
