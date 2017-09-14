@@ -12,7 +12,7 @@
 
 <meta name="author" content="Johannes Ranke" />
 
-<meta name="date" content="2017-07-29" />
+<meta name="date" content="2017-09-14" />
 
 <title>Performance benefit by using compiled model definitions in mkin</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Performance benefit by using compiled model definitions in mkin</h1>
 <h4 class="author"><em>Johannes Ranke</em></h4>
-<h4 class="date"><em>2017-07-29</em></h4>
+<h4 class="date"><em>2017-09-14</em></h4>
 
 
 
@@ -105,9 +105,9 @@ SFO_SFO &lt;-<span class="st"> </span><span class="kw">mkinmod</span>(
 }</code></pre></div>
 <pre><code>## Loading required package: rbenchmark</code></pre>
 <pre><code>##                    test replications elapsed relative user.self sys.self
-## 2      Eigenvalue based            3   2.627    1.239     2.628        0
-## 3     deSolve, compiled            3   2.120    1.000     2.120        0
-## 1 deSolve, not compiled            3  15.438    7.282    15.436        0
+## 2      Eigenvalue based            3   2.620    1.190     2.620        0
+## 3     deSolve, compiled            3   2.201    1.000     2.200        0
+## 1 deSolve, not compiled            3  15.095    6.858    15.096        0
 ##   user.child sys.child
 ## 2          0         0
 ## 3          0         0
@@ -135,13 +135,13 @@ SFO_SFO &lt;-<span class="st"> </span><span class="kw">mkinmod</span>(
 }</code></pre></div>
 <pre><code>## Successfully compiled differential equation model from auto-generated C code.</code></pre>
 <pre><code>##                    test replications elapsed relative user.self sys.self
-## 2     deSolve, compiled            3   3.676    1.000     3.676        0
-## 1 deSolve, not compiled            3  31.218    8.492    31.216        0
+## 2     deSolve, compiled            3   3.678    1.000     3.676        0
+## 1 deSolve, not compiled            3  31.724    8.625    31.724        0
 ##   user.child sys.child
 ## 2          0         0
 ## 1          0         0</code></pre>
-<p>Here we get a performance benefit of a factor of 8 using the version of the differential equation model compiled from C code!</p>
-<p>This vignette was built with mkin 0.9.46 on</p>
+<p>Here we get a performance benefit of a factor of 9 using the version of the differential equation model compiled from C code!</p>
+<p>This vignette was built with mkin 0.9.46.1 on</p>
 <pre><code>## R version 3.4.1 (2017-06-30)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## Running under: Debian GNU/Linux 9 (stretch)</code></pre>
