@@ -11,7 +11,7 @@
 
 <meta name="author" content="Johannes Ranke" />
 
-<meta name="date" content="2017-10-10" />
+<meta name="date" content="2017-11-16" />
 
 <title>Introduction to mkin</title>
 
@@ -234,12 +234,12 @@ div.tocify {
 
 <h1 class="title toc-ignore">Introduction to mkin</h1>
 <h4 class="author"><em>Johannes Ranke</em></h4>
-<h4 class="date"><em>2017-10-10</em></h4>
+<h4 class="date"><em>2017-11-16</em></h4>
 
 </div>
 
 
-<p><a href="http://www.jrwb.de">Wissenschaftlicher Berater, Kronacher Str. 8, 79639 Grenzach-Wyhlen, Germany</a><br /> <a href="http://chem.uft.uni-bremen.de/ranke">Privatdozent at the University of Bremen</a></p>
+<p><a href="http://www.jrwb.de">Wissenschaftlicher Berater, Kronacher Str. 12, 79639 Grenzach-Wyhlen, Germany</a><br /> <a href="http://chem.uft.uni-bremen.de/ranke">Privatdozent at the University of Bremen</a></p>
 <div id="abstract" class="section level1">
 <h1>Abstract</h1>
 <p>In the regulatory evaluation of chemical substances like plant protection products (pesticides), biocides and other chemicals, degradation data play an important role. For the evaluation of pesticide degradation experiments, detailed guidance has been developed, based on nonlinear optimisation. The <code>R</code> add-on package <code>mkin</code> <span class="citation">(Ranke 2016)</span> implements fitting some of the models recommended in this guidance from within R and calculates some statistical measures for data series within one or more compartments, for parent and metabolites.</p>
@@ -288,7 +288,7 @@ plot_sep(f_SFO_SFO_SFO, lpos = c(&quot;topright&quot;, &quot;bottomright&quot;, 
 <p>Soon after the publication of <code>mkin</code>, two derived tools were published, namely KinGUII (available from Bayer Crop Science) and CAKE (commissioned to Tessella by Syngenta), which added a graphical user interface (GUI), and added fitting by iteratively reweighted least squares (IRLS) and characterisation of likely parameter distributions by Markov Chain Monte Carlo (MCMC) sampling.</p>
 <p>CAKE focuses on a smooth use experience, sacrificing some flexibility in the model definition, originally allowing only two primary metabolites in parallel. The current version 3.2 of CAKE release in March 2016 uses a basic scheme for up to six metabolites in a flexible arrangement, but does not support back-reactions (non-instantaneous equilibria) or biphasic kinetics for metabolites.</p>
 <p>KinGUI offers an even more flexible widget for specifying complex kinetic models. Back-reactions (non-instanteneous equilibria) were supported early on, but until 2014, only simple first-order models could be specified for transformation products. Starting with KinGUII version 2.1, biphasic modelling of metabolites was also available in KinGUII.</p>
-<p>A further graphical user interface (GUI) that has recently been brought to a decent degree of maturity is the browser based GUI named <code>gmkin</code>. Please see its <a href="http://kinfit.r-forge.r-project.org/gmkin_static">documentation page</a> and <a href="http://kinfit.r-forge.r-project.org/gmkin_static/vignettes/gmkin_manual.html">manual</a> for further information.</p>
+<p>A further graphical user interface (GUI) that has recently been brought to a decent degree of maturity is the browser based GUI named <code>gmkin</code>. Please see its <a href="https://pkgdown.jrwb.de/gmkin">documentation page</a> and <a href="https://pkgdown.jrwb.de/gmkin/articles/gmkin_manual.html">manual</a> for further information.</p>
 </div>
 <div id="recent-developments" class="section level2">
 <h2>Recent developments</h2>
