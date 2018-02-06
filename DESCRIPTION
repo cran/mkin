@@ -1,8 +1,8 @@
 Package: mkin
 Type: Package
 Title: Kinetic Evaluation of Chemical Degradation Data
-Version: 0.9.46.3
-Date: 2017-11-16
+Version: 0.9.47.1
+Date: 2018-01-30
 Authors@R: c(person("Johannes", "Ranke", role = c("aut", "cre", "cph"),
                     email = "jranke@uni-bremen.de",
                     comment = c(ORCID = "0000-0003-4371-6538")),
@@ -28,11 +28,12 @@ VignetteBuilder: knitr
 BugReports: http://github.com/jranke/mkin/issues
 URL: https://cgit.jrwb.de/mkin/about
 NeedsCompilation: no
-Packaged: 2017-11-16 16:16:44 UTC; jranke
-Author: Johannes Ranke [aut, cre, cph] (0000-0003-4371-6538),
+Packaged: 2018-02-06 16:25:19 UTC; jranke
+Author: Johannes Ranke [aut, cre, cph]
+    (<https://orcid.org/0000-0003-4371-6538>),
   Katrin Lindenberger [ctb],
   René Lehmann [ctb],
   Eurofins Regulatory AG [cph]
 Maintainer: Johannes Ranke <jranke@uni-bremen.de>
 Repository: CRAN
-Date/Publication: 2017-11-16 19:33:51 UTC
+Date/Publication: 2018-02-06 17:23:47 UTC
