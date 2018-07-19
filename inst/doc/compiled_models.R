@@ -48,7 +48,7 @@ if (require(rbenchmark)) {
 }
 
 ## ----sessionInfo, echo = FALSE-------------------------------------------
-cat(capture.output(sessionInfo())[1:3], sep = "\n")
+cat(utils::capture.output(utils::sessionInfo())[1:3], sep = "\n")
 if(!inherits(try(cpuinfo <- readLines("/proc/cpuinfo")), "try-error")) {
   cat(gsub("model name\t: ", "CPU model: ", cpuinfo[grep("model name", cpuinfo)[1]]))
 }

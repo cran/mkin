@@ -12,7 +12,7 @@
 
 <meta name="author" content="Johannes Ranke" />
 
-<meta name="date" content="2018-02-06" />
+<meta name="date" content="2018-07-18" />
 
 <title>Performance benefit by using compiled model definitions in mkin</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Performance benefit by using compiled model definitions in mkin</h1>
 <h4 class="author"><em>Johannes Ranke</em></h4>
-<h4 class="date"><em>2018-02-06</em></h4>
+<h4 class="date"><em>2018-07-18</em></h4>
 
 
 
@@ -87,65 +87,65 @@ SFO_SFO &lt;-<span class="st"> </span><span class="kw">mkinmod</span>(
   <span class="dt">m1 =</span> <span class="kw">mkinsub</span>(<span class="st">&quot;SFO&quot;</span>))</code></pre></div>
 <pre><code>## Successfully compiled differential equation model from auto-generated C code.</code></pre>
 <p>We can compare the performance of the Eigenvalue based solution against the compiled version and the R implementation of the differential equations using the benchmark package.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">if (<span class="kw">require</span>(rbenchmark)) {
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="kw">require</span>(rbenchmark)) {
   b<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">benchmark</span>(
-    <span class="st">&quot;deSolve, not compiled&quot;</span> =<span class="st"> </span><span class="kw">mkinfit</span>(SFO_SFO, FOCUS_2006_D,
+    <span class="st">&quot;deSolve, not compiled&quot;</span> =<span class="st"> </span><span class="kw">mkinfit</span>(SFO_SFO, FOCUS_<span class="dv">2006</span>_D,
                                       <span class="dt">solution_type =</span> <span class="st">&quot;deSolve&quot;</span>,
                                       <span class="dt">use_compiled =</span> <span class="ot">FALSE</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>),
-    <span class="st">&quot;Eigenvalue based&quot;</span> =<span class="st"> </span><span class="kw">mkinfit</span>(SFO_SFO, FOCUS_2006_D,
+    <span class="st">&quot;Eigenvalue based&quot;</span> =<span class="st"> </span><span class="kw">mkinfit</span>(SFO_SFO, FOCUS_<span class="dv">2006</span>_D,
                                  <span class="dt">solution_type =</span> <span class="st">&quot;eigen&quot;</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>),
-    <span class="st">&quot;deSolve, compiled&quot;</span> =<span class="st"> </span><span class="kw">mkinfit</span>(SFO_SFO, FOCUS_2006_D,
+    <span class="st">&quot;deSolve, compiled&quot;</span> =<span class="st"> </span><span class="kw">mkinfit</span>(SFO_SFO, FOCUS_<span class="dv">2006</span>_D,
                                   <span class="dt">solution_type =</span> <span class="st">&quot;deSolve&quot;</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>),
     <span class="dt">replications =</span> <span class="dv">3</span>)
   <span class="kw">print</span>(b<span class="fl">.1</span>)
   factor_SFO_SFO &lt;-<span class="st"> </span><span class="kw">round</span>(b<span class="fl">.1</span>[<span class="st">&quot;1&quot;</span>, <span class="st">&quot;relative&quot;</span>])
-} else {
+} <span class="cf">else</span> {
   factor_SFO_SFO &lt;-<span class="st"> </span><span class="ot">NA</span>
   <span class="kw">print</span>(<span class="st">&quot;R package benchmark is not available&quot;</span>)
 }</code></pre></div>
 <pre><code>## Loading required package: rbenchmark</code></pre>
 <pre><code>##                    test replications elapsed relative user.self sys.self
-## 2      Eigenvalue based            3   2.814    1.309     2.812        0
-## 3     deSolve, compiled            3   2.150    1.000     2.148        0
-## 1 deSolve, not compiled            3  15.116    7.031    15.116        0
+## 2      Eigenvalue based            3   2.528    1.218     2.527        0
+## 3     deSolve, compiled            3   2.076    1.000     2.075        0
+## 1 deSolve, not compiled            3  15.617    7.523    15.610        0
 ##   user.child sys.child
 ## 2          0         0
 ## 3          0         0
 ## 1          0         0</code></pre>
-<p>We see that using the compiled model is by a factor of around 7 faster than using the R version with the default ode solver, and it is even faster than the Eigenvalue based solution implemented in R which does not need iterative solution of the ODEs.</p>
+<p>We see that using the compiled model is by a factor of around 8 faster than using the R version with the default ode solver, and it is even faster than the Eigenvalue based solution implemented in R which does not need iterative solution of the ODEs.</p>
 </div>
 <div id="model-that-can-not-be-solved-with-eigenvalues" class="section level2">
 <h2>Model that can not be solved with Eigenvalues</h2>
 <p>This evaluation is also taken from the example section of mkinfit.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">if (<span class="kw">require</span>(rbenchmark)) {
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="kw">require</span>(rbenchmark)) {
   FOMC_SFO &lt;-<span class="st"> </span><span class="kw">mkinmod</span>(
     <span class="dt">parent =</span> <span class="kw">mkinsub</span>(<span class="st">&quot;FOMC&quot;</span>, <span class="st">&quot;m1&quot;</span>),
     <span class="dt">m1 =</span> <span class="kw">mkinsub</span>( <span class="st">&quot;SFO&quot;</span>))
 
   b<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">benchmark</span>(
-    <span class="st">&quot;deSolve, not compiled&quot;</span> =<span class="st"> </span><span class="kw">mkinfit</span>(FOMC_SFO, FOCUS_2006_D,
+    <span class="st">&quot;deSolve, not compiled&quot;</span> =<span class="st"> </span><span class="kw">mkinfit</span>(FOMC_SFO, FOCUS_<span class="dv">2006</span>_D,
                                       <span class="dt">use_compiled =</span> <span class="ot">FALSE</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>),
-    <span class="st">&quot;deSolve, compiled&quot;</span> =<span class="st"> </span><span class="kw">mkinfit</span>(FOMC_SFO, FOCUS_2006_D, <span class="dt">quiet =</span> <span class="ot">TRUE</span>),
+    <span class="st">&quot;deSolve, compiled&quot;</span> =<span class="st"> </span><span class="kw">mkinfit</span>(FOMC_SFO, FOCUS_<span class="dv">2006</span>_D, <span class="dt">quiet =</span> <span class="ot">TRUE</span>),
     <span class="dt">replications =</span> <span class="dv">3</span>)
   <span class="kw">print</span>(b<span class="fl">.2</span>)
   factor_FOMC_SFO &lt;-<span class="st"> </span><span class="kw">round</span>(b<span class="fl">.2</span>[<span class="st">&quot;1&quot;</span>, <span class="st">&quot;relative&quot;</span>])
-} else {
+} <span class="cf">else</span> {
   factor_FOMC_SFO &lt;-<span class="st"> </span><span class="ot">NA</span>
   <span class="kw">print</span>(<span class="st">&quot;R package benchmark is not available&quot;</span>)
 }</code></pre></div>
 <pre><code>## Successfully compiled differential equation model from auto-generated C code.</code></pre>
 <pre><code>##                    test replications elapsed relative user.self sys.self
-## 2     deSolve, compiled            3   3.661    1.000     3.660        0
-## 1 deSolve, not compiled            3  31.110    8.498    31.108        0
+## 2     deSolve, compiled            3   3.633    1.000     3.631        0
+## 1 deSolve, not compiled            3  33.538    9.231    33.522        0
 ##   user.child sys.child
 ## 2          0         0
 ## 1          0         0</code></pre>
-<p>Here we get a performance benefit of a factor of 8 using the version of the differential equation model compiled from C code!</p>
-<p>This vignette was built with mkin 0.9.47.1 on</p>
-<pre><code>## R version 3.4.3 (2017-11-30)
+<p>Here we get a performance benefit of a factor of 9 using the version of the differential equation model compiled from C code!</p>
+<p>This vignette was built with mkin 0.9.47.2 on</p>
+<pre><code>## R version 3.5.1 (2018-07-02)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## Running under: Debian GNU/Linux 9 (stretch)</code></pre>
-<pre><code>## CPU model: Intel(R) Core(TM) i7-4710MQ CPU @ 2.50GHz</code></pre>
+<pre><code>## CPU model: AMD Ryzen 7 1700 Eight-Core Processor</code></pre>
 </div>
 
 
