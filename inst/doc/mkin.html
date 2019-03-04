@@ -11,7 +11,7 @@
 
 <meta name="author" content="Johannes Ranke" />
 
-<meta name="date" content="2018-09-14" />
+<meta name="date" content="2019-03-04" />
 
 <title>Introduction to mkin</title>
 
@@ -1408,8 +1408,14 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
+}
+summary {
+  display: list-item;
 }
 </style>
 
@@ -1418,9 +1424,70 @@ button.code-folding-btn:focus {
 <div class="container-fluid main-container">
 
 <!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
 });
 </script>
 
@@ -1433,7 +1500,6 @@ $(document).ready(function () {
   window.initializeCodeFolding("hide" === "show");
 });
 </script>
-
 
 
 
@@ -1548,7 +1614,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Introduction to mkin</h1>
 <h4 class="author"><em>Johannes Ranke</em></h4>
-<h4 class="date"><em>2018-09-14</em></h4>
+<h4 class="date"><em>2019-03-04</em></h4>
 
 </div>
 
@@ -1590,7 +1656,7 @@ plot_sep(f_SFO_SFO_SFO, lpos = c(&quot;topright&quot;, &quot;bottomright&quot;, 
 <div id="background" class="section level1">
 <h1>Background</h1>
 <p>Many approaches are possible regarding the evaluation of chemical degradation data.</p>
-<p>The now deprecated <code>kinfit</code> package <span class="citation">(Ranke 2015)</span> in <code>R</code> <span class="citation">(R Development Core Team 2016)</span> implements the approach recommended in the kinetics report provided by the FOrum for Co-ordination of pesticide fate models and their USe <span class="citation">(FOCUS Work Group on Degradation Kinetics 2006; 2014)</span> for simple data series for one parent compound in one compartment.</p>
+<p>The now deprecated <code>kinfit</code> package <span class="citation">(Ranke 2015)</span> in <code>R</code> <span class="citation">(R Development Core Team 2016)</span> implements the approach recommended in the kinetics report provided by the FOrum for Co-ordination of pesticide fate models and their USe <span class="citation">(FOCUS Work Group on Degradation Kinetics 2006, 2014)</span> for simple data series for one parent compound in one compartment.</p>
 <p>The <code>mkin</code> package <span class="citation">(Ranke 2016)</span> extends this approach to data series with transformation products, commonly termed metabolites, and to more than one compartment. It is also possible to include back reactions, so equilibrium reactions and equilibrium partitioning can be specified, although this oftentimes leads to an overparameterisation of the model.</p>
 <p>When the first <code>mkin</code> code was published in 2010, the most commonly used tools for fitting more complex kinetic degradation models to experimental data were KinGUI <span class="citation">(Schäfer et al. 2007)</span>, a MATLAB based tool with a graphical user interface that was specifically tailored to the task and included some output as proposed by the FOCUS Kinetics Workgroup, and ModelMaker, a general purpose compartment based tool providing infrastructure for fitting dynamic simulation models based on differential equations to data.</p>
 <p>The code was first uploaded to the BerliOS platform. When this was taken down, the version control history was imported into the R-Forge site, where the code is still mirrored today (see <em>e.g.</em> <a href="http://cgit.jrwb.de/mkin/commit/?id=30cbb4092f6d2d3beff5800603374a0d009ad770">the initial commit on 11 May 2010</a>).</p>
@@ -1642,9 +1708,6 @@ plot_sep(f_SFO_SFO_SFO, lpos = c(&quot;topright&quot;, &quot;bottomright&quot;, 
 <div id="ref-FOCUSkinetics2014">
 <p>———. 2014. <em>Generic Guidance for Estimating Persistence and Degradation Kinetics from Environmental Fate Studies on Pesticides in Eu Registration</em>. 1.1 ed. <a href="http://esdac.jrc.ec.europa.eu/projects/degradation-kinetics" class="uri">http://esdac.jrc.ec.europa.eu/projects/degradation-kinetics</a>.</p>
 </div>
-<div id="ref-rcore2016">
-<p>R Development Core Team. 2016. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://www.R-project.org" class="uri">https://www.R-project.org</a>.</p>
-</div>
 <div id="ref-pkg:kinfit">
 <p>Ranke, J. 2015. <em>‘Kinfit‘: Routines for Fitting Simple Kinetic Models to Chemical Degradation Data</em>. <a href="https://CRAN.R-project.org/package=kinfit" class="uri">https://CRAN.R-project.org/package=kinfit</a>.</p>
 </div>
@@ -1656,6 +1719,9 @@ plot_sep(f_SFO_SFO_SFO, lpos = c(&quot;topright&quot;, &quot;bottomright&quot;, 
 </div>
 <div id="ref-ranke2015">
 <p>———. 2015. “To T-Test or Not to T-Test, That Is the Question.” In <em>XV Symposium on Pesticide Chemistry 2-4 September 2015</em>. Piacenza. <a href="http://chem.uft.uni-bremen.de/ranke/posters/piacenza_2015.pdf" class="uri">http://chem.uft.uni-bremen.de/ranke/posters/piacenza_2015.pdf</a>.</p>
+</div>
+<div id="ref-rcore2016">
+<p>R Development Core Team. 2016. <em><span class="sans-serif">R</span>: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://www.R-project.org" class="uri">https://www.R-project.org</a>.</p>
 </div>
 <div id="ref-schaefer2007">
 <p>Schäfer, D., B. Mikolasch, P. Rainbird, and B. Harvey. 2007. “KinGUI: A New Kinetic Software Tool for Evaluations According to FOCUS Degradation Kinetics.” In <em>Proceedings of the Xiii Symposium Pesticide Chemistry</em>, edited by Del Re A. A. M., Capri E., Fragoulis G., and Trevisan M., 916–23. Piacenza.</p>

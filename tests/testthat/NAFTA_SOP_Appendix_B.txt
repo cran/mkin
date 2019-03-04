@@ -1,0 +1,35 @@
+Sums of squares:
+      SFO      IORE      DFOP 
+174.39718  21.91831  16.57180 
+
+Critical sum of squares for checking the SFO model:
+[1] 26.93798
+
+Parameters:
+$SFO
+              Estimate   Pr(>t)  Lower  Upper
+parent_0        51.243 1.18e-10 45.404 57.082
+k_parent_sink    0.253 1.61e-06  0.194  0.331
+
+$IORE
+                    Estimate   Pr(>t)    Lower    Upper
+parent_0            51.71053 8.52e-15 4.95e+01 53.90735
+k__iore_parent_sink  0.00135 6.84e-02 3.42e-04  0.00531
+N_parent             2.66147 3.98e-08 2.19e+00  3.13193
+
+$DFOP
+         Estimate   Pr(>t)    Lower   Upper
+parent_0  51.7055 3.46e-14 49.67793 53.7330
+k1         0.4157 1.00e-06  0.33077  0.5224
+k2         0.0127 1.39e-03  0.00723  0.0224
+g          0.8338 5.72e-12  0.77182  0.8815
+
+
+DTx values:
+     DT50 DT90 DT50_rep
+SFO  2.74  9.1     2.74
+IORE 1.37 28.5     8.57
+DFOP 2.17 39.9    54.40
+
+Representative half-life:
+[1] 8.573302

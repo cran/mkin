@@ -1,9 +1,10 @@
-## ---- include = FALSE----------------------------------------------------
+## ---- include = FALSE, message = FALSE-----------------------------------
 library(knitr)
-opts_chunk$set(tidy = FALSE, cache = TRUE)
+opts_chunk$set(tidy = FALSE, cache = FALSE)
+library(mkin)
 
 ## ----data----------------------------------------------------------------
-library("mkin", quietly = TRUE)
+library(mkin, quietly = TRUE)
 print(FOCUS_2006_D)
 
 ## ----model---------------------------------------------------------------
