@@ -99,22 +99,22 @@ d_synth_DFOP_par <- mkinpredict(m_synth_DFOP_par,
 d_synth_names = paste0("d_synth_", c("SFO_lin", "SFO_par",
                                      "DFOP_lin", "DFOP_par"))
 
-# Function for adding errors. The add_err function now published with this
-# package is a slightly generalised version where the names of secondary
-# compartments that should have an initial value of zero (M1 and M2 in this
-# case) are not hardcoded any more.
-add_err = function(d, sdfunc, LOD = 0.1, reps = 2, seed = 123456789)
-{
-  set.seed(seed)
-  d_long = mkin_wide_to_long(d, time = "time")
-  d_rep = data.frame(lapply(d_long, rep, each = 2))
-  d_rep$value = rnorm(length(d_rep$value), d_rep$value, sdfunc(d_rep$value))
-
-  d_rep[d_rep$time == 0 & d_rep$name %in% c("M1", "M2"), "value"] <- 0
-  d_NA <- transform(d_rep, value = ifelse(value < LOD, NA, value))
-  d_NA$value <- round(d_NA$value, 1)
-  return(d_NA)
-}
+# Original function used or adding errors. The add_err function now published
+# with this package is a slightly generalised version where the names of
+# secondary compartments that should have an initial value of zero (M1 and M2
+# in this case) are not hardcoded any more.
+# add_err = function(d, sdfunc, LOD = 0.1, reps = 2, seed = 123456789)
+# {
+#   set.seed(seed)
+#   d_long = mkin_wide_to_long(d, time = "time")
+#   d_rep = data.frame(lapply(d_long, rep, each = 2))
+#   d_rep$value = rnorm(length(d_rep$value), d_rep$value, sdfunc(d_rep$value))
+#
+#   d_rep[d_rep$time == 0 & d_rep$name \%in\% c("M1", "M2"), "value"] <- 0
+#   d_NA <- transform(d_rep, value = ifelse(value < LOD, NA, value))
+#   d_NA$value <- round(d_NA$value, 1)
+#   return(d_NA)
+# }
 
 # The following is the simplified version of the two-component model of Rocke
 # and Lorenzato (1995)
@@ -139,10 +139,10 @@ d_synth_err_names = c(
 
 # This is just one example of an evaluation using the kinetic model used for
 # the generation of the data
-fit <- mkinfit(m_synth_SFO_lin, synthetic_data_for_UBA_2014[[1]]$data,
-               quiet = TRUE)
-plot_sep(fit)
-summary(fit)
+  fit <- mkinfit(m_synth_SFO_lin, synthetic_data_for_UBA_2014[[1]]$data,
+                 quiet = TRUE)
+  plot_sep(fit)
+  summary(fit)
 }
 }
 \keyword{datasets}
