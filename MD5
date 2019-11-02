@@ -1,7 +1,7 @@
-0d58ac1711142a3a4f4ec23b2693d3d9 *DESCRIPTION
-6ec7c7701467f32aac5de26810dd2bea *NAMESPACE
-b5d15496885c58aa28e86452222838ac *NEWS.md
-f5675f0c2da0996d8e68ad813be461c2 *R/AIC.mmkin.R
+f80c4b0d1d2aa0d02ba15ec26966017f *DESCRIPTION
+afdd3babe31f6ecc5db1e04d052e3219 *NAMESPACE
+152bbaca89305b9d1c2c37e5d83fba31 *NEWS.md
+a4692a3459f5b241de58f40f6e55257f *R/AIC.mmkin.R
 cf6e6cfdbd025ce8bec8f1bb25ef70d2 *R/CAKE_export.R
 7ad3df1f290e30b577d11fdad8ce690e *R/DFOP.solution.R
 750144993e0d110b993fcfe8e681dc3a *R/FOMC.solution.R
@@ -22,7 +22,7 @@ fa2cc8a49033fcef5717fc21d8574697 *R/max_twa_parent.R
 7f16fb250f85d229313bebee3d4cc03b *R/mkinds.R
 ffa893a92122dd19ca40331c8b670ac5 *R/mkinerrmin.R
 90cb6e01ba46f7b92ed0ba8c827f8168 *R/mkinerrplot.R
-d8d2f10495f3fe26c39fa67a27b09295 *R/mkinfit.R
+bf9eea814e830986b76517661b7c75b3 *R/mkinfit.R
 7a917277a4fa38b080eaebf308a23180 *R/mkinmod.R
 69249473454267e49da7a6261775378c *R/mkinparplot.R
 4a3ee383f9b37449a23ac19caf651a86 *R/mkinpredict.R
@@ -30,6 +30,7 @@ d8d2f10495f3fe26c39fa67a27b09295 *R/mkinfit.R
 5f5d180e79c41f2e93233ad90c56ebb9 *R/mkinsub.R
 4290dbc6d4468cef468617f9a4246807 *R/mmkin.R
 f38e8e2c6818848733501ee4fca821ab *R/nafta.R
+72f3984f684d767358b8f8bc10d16e95 *R/nobs.mkinfit.R
 1be62b0934f45a90c288f4108f9cffb9 *R/parms.mkinfit.R
 aeaf75e08b2c99250db3fbaa8afae97f *R/plot.mkinfit.R
 524acbdf4b001bd07abcfbd958ccbdbe *R/plot.mmkin.R
@@ -38,7 +39,7 @@ aeaf75e08b2c99250db3fbaa8afae97f *R/plot.mkinfit.R
 439a455a6f3b2aeca5f3ac18006b5d79 *R/summary.mkinfit.R
 5754c0f1fbd01e04328b6c1660493f49 *R/transform_odeparms.R
 ea1033462ac8efed1672124a378f344a *R/update.mkinfit.R
-495b684a1f91e6faddbbf486e5ac6b6f *README.md
+1d25ad652ad2b20c88403a86cd719dd6 *README.md
 8d3b4c6b7ea593d0bbca37faa26c9fd0 *TODO
 cd25ecfe983c2710492206a4efad9ee9 *build/vignette.rds
 d31d17a242de56d266802dea51c3e8c0 *data/FOCUS_2006_DFOP_ref_A_to_B.rda
@@ -55,17 +56,17 @@ e42e4e09288edc34e53d4e1678c323e8 *data/schaefer07_complex_case.RData
 e814c77e4374b7fbe588a1f98061dd65 *data/test_data_from_UBA_2014.rda
 47384a3eb33de535734507930b7aef5e *inst/doc/FOCUS_D.R
 7d37d26a0527df462a262701faefebbe *inst/doc/FOCUS_D.Rmd
-b6eef938e586c1b41e2dc82f4ef6127f *inst/doc/FOCUS_D.html
+a505be851b93ea7e267d9e51f5c10315 *inst/doc/FOCUS_D.html
 cf87f0bd35a1af263ea1b531f4983d19 *inst/doc/FOCUS_L.R
 5606844914e3dfc4696767f1afb2196b *inst/doc/FOCUS_L.Rmd
-35b538b5fb4e0a58c21a2f2ab76cef3c *inst/doc/FOCUS_L.html
+5cd5947cb2602bbaae2e430050d07d5d *inst/doc/FOCUS_L.html
 03135e59a648fa275804a4a92cf23abc *inst/doc/mkin.R
 495e5bd6bfbc7c4853e50f77595b1186 *inst/doc/mkin.Rmd
-fdd01534c714f06178f6d0bbc928a522 *inst/doc/mkin.html
+c7847965b2478b4e9b5b05894dff4660 *inst/doc/mkin.html
 fcd75005e57edb128feb0ea5a4fd812e *inst/doc/twa.Rmd
-607d2e2ef42864186994bd5300487f12 *inst/doc/twa.html
+74cb9e8e03e8687d89944b043f26a328 *inst/doc/twa.html
 c21e631c67ff475182cf38985402178b *inst/testdata/fit_old_FOCUS_D.rda
-7e6cee878ee00b30c933b97da9b06c87 *man/AIC.mmkin.Rd
+0b04a4b637aa0238261b4a85b188b8c3 *man/AIC.mmkin.Rd
 e4cb0ca4c78d1660e11d6d587ac6906e *man/CAKE_export.Rd
 6bb867e555bc20195871f181eed30b27 *man/DFOP.solution.Rd
 30821ef8e958c71ee566d22a1cc48aaf *man/Extract.mmkin.Rd
@@ -105,6 +106,7 @@ f164b683e31de384c6494f87fabf2049 *man/mkinresplot.Rd
 d66dd153e897d5739b325cd3c0643d4f *man/mkinsub.Rd
 0acc63d0262ec08137e742086ddcabc7 *man/mmkin.Rd
 d4b7366e187b0146cf50a412c34cfe58 *man/nafta.Rd
+af43556a0f71ee3d9d07b6ad72b9f910 *man/nobs.mkinfit.Rd
 0bede6574f308a3c78447ff6233e8a4e *man/parms.Rd
 b24e0c0604f1be857af9c28dc6e5ba39 *man/plot.mkinfit.Rd
 12ef0910001e87dc9746f98331789feb *man/plot.mmkin.Rd
@@ -139,7 +141,7 @@ f15b68906849109c3097e248581e5380 *tests/testthat.R
 d41d8cd98f00b204e9800998ecf8427e *tests/testthat/AIC_exp_d_3.out
 f7ad5922571696f8d87118ddd8f02253 *tests/testthat/DFOP_FOCUS_C_messages.txt
 728e0ee755b224973f0fb51208c1797a *tests/testthat/FOCUS_2006_C_mkinds.txt
-d0bd0cce4f9221ab74e27ec6002dfeb8 *tests/testthat/FOCUS_2006_D.csf
+af7483072743616576a41366ecb6c00e *tests/testthat/FOCUS_2006_D.csf
 a45aa30ed9db715e0fcce820c66b45b9 *tests/testthat/FOCUS_2006_D.rds
 56b51283f900e2060a87e0e0e5843395 *tests/testthat/NAFTA_SOP_Appendix_B.txt
 2330dffee7b93ea765cdba6f0aae7c52 *tests/testthat/NAFTA_SOP_Appendix_D.txt
@@ -155,7 +157,7 @@ c60ed969b6e18c4c8c0c1fcc50860747 *tests/testthat/summary_DFOP_FOCUS_D_deSolve.tx
 36a17ed1becb2e311b75d1944eb30627 *tests/testthat/test_FOCUS_chi2_error_level.R
 86014575a71f12ad644b039e81c89cc0 *tests/testthat/test_SFORB.R
 bf50e2c538eaf582ae79a340332619b5 *tests/testthat/test_confidence.R
-6264dc85b06b0eeac426f9737430ec2b *tests/testthat/test_error_models.R
+e70b9bdbb5baeebb44263c73fac97b3b *tests/testthat/test_error_models.R
 66142ea5ab26fd2e2ffbe6d15ea01392 *tests/testthat/test_from_max_mean.R
 b44fe488704134a2577001f652c92d64 *tests/testthat/test_logistic.R
 a753b02d0656280dc55f2f0d7daa265d *tests/testthat/test_mkinds.R
@@ -163,7 +165,7 @@ d949464d349d50b3874d27e3023a565a *tests/testthat/test_mkinfit_errors.R
 9fca4e71cda400575a67c1b1c5c6b58b *tests/testthat/test_mkinmod.R
 57f9c1959997a0293e7d1f778108a80d *tests/testthat/test_mkinpredict_SFO_SFO.R
 473a10181bebb92542136e0993bf6f91 *tests/testthat/test_nafta.R
-b5ea207c2ea81ec64ffe7ce2fdad57ae *tests/testthat/test_plots_summary_twa.R
+c5df7d3b74c2730fbafcf182a190d9d9 *tests/testthat/test_plots_summary_twa.R
 14b4011f257c9f38fde5f953b3b74713 *tests/testthat/test_residuals.R
 7c4eb93543cd59ad9ebdd76905cdd536 *tests/testthat/test_schaefer07_complex_case.R
 30348fa8a502f6b0a2eb93fc06a6fbd3 *tests/testthat/test_summary_old_objects.R
