@@ -1,6 +1,6 @@
-ae10bab8256cb4db43421f554c00e11d *DESCRIPTION
+432f29e20ed311ec96febf396c456fa2 *DESCRIPTION
 12a397718b29b04eab5c0ad50efc1025 *NAMESPACE
-c2fccdc55dba7a31816a6886c5ee8706 *NEWS.md
+8a8abee6ddcd27dde2590043777fd677 *NEWS.md
 f04bd56b9f08df2f155e929a71608472 *R/AIC.mmkin.R
 cf6e6cfdbd025ce8bec8f1bb25ef70d2 *R/CAKE_export.R
 7ad3df1f290e30b577d11fdad8ce690e *R/DFOP.solution.R
@@ -61,15 +61,15 @@ e42e4e09288edc34e53d4e1678c323e8 *data/schaefer07_complex_case.RData
 e814c77e4374b7fbe588a1f98061dd65 *data/test_data_from_UBA_2014.rda
 0cad8d6d2b0d5f656494ff7cc8947a3f *inst/doc/FOCUS_D.R
 7d37d26a0527df462a262701faefebbe *inst/doc/FOCUS_D.Rmd
-285b373cff8b1d665a5766d018ecc15b *inst/doc/FOCUS_D.html
+e761d64f80a933ab16fc416712187b04 *inst/doc/FOCUS_D.html
 66424c3c05beb89fab62732ad71d986c *inst/doc/FOCUS_L.R
 5606844914e3dfc4696767f1afb2196b *inst/doc/FOCUS_L.Rmd
-01aa0ed07fbd40da8a3f1d65315b1dbd *inst/doc/FOCUS_L.html
+1f6869d83b7223c909175e55e28ba1cd *inst/doc/FOCUS_L.html
 968113370de1cf04269db761c742b7b7 *inst/doc/mkin.R
 495e5bd6bfbc7c4853e50f77595b1186 *inst/doc/mkin.Rmd
-786ea57c1cf346c2f85c34e2011465d2 *inst/doc/mkin.html
+0523e860d3c558af384710e691438bba *inst/doc/mkin.html
 fcd75005e57edb128feb0ea5a4fd812e *inst/doc/twa.Rmd
-b6c5775004946eda5a370c82f7e346ed *inst/doc/twa.html
+18de501429d7c6091e0806af2c7f5020 *inst/doc/twa.html
 c21e631c67ff475182cf38985402178b *inst/testdata/fit_old_FOCUS_D.rda
 017227a0dd1da992876340355de2ee05 *man/AIC.mmkin.Rd
 ecf3adaeae74723953a2f9652bb52048 *man/CAKE_export.Rd
@@ -155,7 +155,7 @@ f15b68906849109c3097e248581e5380 *tests/testthat.R
 d41d8cd98f00b204e9800998ecf8427e *tests/testthat/AIC_exp_d_3.out
 ecf64f504782fbfc237f9907121252a5 *tests/testthat/DFOP_FOCUS_C_messages.txt
 728e0ee755b224973f0fb51208c1797a *tests/testthat/FOCUS_2006_C_mkinds.txt
-1f8a176dd2fd76aa91d9d5d351f412a4 *tests/testthat/FOCUS_2006_D.csf
+f8f373e0cc9debe0a60af6f56c0bfccb *tests/testthat/FOCUS_2006_D.csf
 a45aa30ed9db715e0fcce820c66b45b9 *tests/testthat/FOCUS_2006_D.rds
 56b51283f900e2060a87e0e0e5843395 *tests/testthat/NAFTA_SOP_Appendix_B.txt
 2330dffee7b93ea765cdba6f0aae7c52 *tests/testthat/NAFTA_SOP_Appendix_D.txt
@@ -182,7 +182,7 @@ d949464d349d50b3874d27e3023a565a *tests/testthat/test_mkinfit_errors.R
 473a10181bebb92542136e0993bf6f91 *tests/testthat/test_nafta.R
 b0c18971be78eae935596251c7226ac3 *tests/testthat/test_nlme.R
 508aa810e0aae1bcdf9b2f04befb5f95 *tests/testthat/test_plots_summary_twa.R
-b93c5e9712114dd26052dcfb4ebe8d36 *tests/testthat/test_residuals.R
+084dc6e9f764afd5f93b2fb8ee91bc19 *tests/testthat/test_residuals.R
 7c4eb93543cd59ad9ebdd76905cdd536 *tests/testthat/test_schaefer07_complex_case.R
 30348fa8a502f6b0a2eb93fc06a6fbd3 *tests/testthat/test_summary_old_objects.R
 421d6394e464025fba09900aea7be3ce *tests/testthat/test_synthetic_data_for_UBA_2014.R
