@@ -1,4 +1,12 @@
-# mkin 0.9.49.11 (unreleased)
+# mkin 0.9.50.1 (unreleased)
+
+- Support SFORB with formation fractions
+
+- 'mkinmod': Make 'use_of_ff' = "max" the default
+
+- Improve performance by a) avoiding expensive calls in the cost function like merge() and data.frame(), and b) by implementing analytical solutions for SFO-SFO and DFOP-SFO
+
+# mkin 0.9.49.11 (2020-04-20)
 
 - Increase a test tolerance to make it pass on all CRAN check machines
 

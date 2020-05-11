@@ -6,7 +6,7 @@
 \usage{
 mkinmod(
   ...,
-  use_of_ff = "min",
+  use_of_ff = "max",
   speclist = NULL,
   quiet = FALSE,
   verbose = FALSE
@@ -60,8 +60,8 @@ A list of class \code{mkinmod} for use with \code{\link{mkinfit}},
     The coefficient matrix, if the system of differential equations can be
     represented by one.
   }
-  \item{ll}{
-    The likelihood function, taking the parameter vector as the first argument.
+  \item{cf}{
+    If generated, the compiled function as returned by cfunction.
   }
 }
 \description{
@@ -82,7 +82,7 @@ The IORE submodel is not well tested for metabolites. When using this
 \examples{
 
 # Specify the SFO model (this is not needed any more, as we can now mkinfit("SFO", ...)
-SFO <- mkinmod(parent = list(type = "SFO"))
+SFO <- mkinmod(parent = mkinsub("SFO"))
 
 # One parent compound, one metabolite, both single first order
 SFO_SFO <- mkinmod(

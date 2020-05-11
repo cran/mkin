@@ -1,21 +1,3 @@
-# Copyright (C) 2016-2020 Johannes Ranke
-# Contact: jranke@uni-bremen.de
-
-# This file is part of the R package mkin
-
-# mkin is free software: you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation, either version 3 of the License, or (at your option) any later
-# version.
-
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
-# details.
-
-# You should have received a copy of the GNU General Public License along with
-# this program. If not, see <http://www.gnu.org/licenses/>
-
 context("Calculation of maximum time weighted average concentrations (TWAs)")
 
 test_that("Time weighted average concentrations are correct", {
@@ -31,7 +13,7 @@ test_that("Time weighted average concentrations are correct", {
                 odeparms = bpar[2:length(bpar)],
                 odeini = c(parent = bpar[[1]]),
                 outtimes = outtimes_10)
-    twa_num <- mean(pred_10$parent)
+    twa_num <- mean(pred_10[, "parent"])
     names(twa_num) <- 10
     twa_ana <- max_twa_parent(fit, 10)
 
@@ -57,7 +39,7 @@ test_that("Summaries are reproducible", {
   # The correlation matrix is quite platform dependent
   # It differs between i386 and amd64 on Windows
   # and between Travis and my own Linux system
-  test_summary$Corr <- NULL
+  test_summary$Corr <- "Correlation matrix is platform dependent, not tested"
   expect_known_output(print(test_summary), "summary_DFOP_FOCUS_C.txt")
 
   test_summary_2 <- summary(f_sfo_sfo_eigen)
@@ -71,7 +53,9 @@ test_that("Summaries are reproducible", {
   # It differs between i386 and amd64 on Windows
   # and between Travis and my own Linux system
   # Even more so when using the Eigen method
-  test_summary_2$Corr <- NULL
+  test_summary_2$Corr <- "Correlation matrix is platform dependent, not tested"
+  # The residuals for this method are also platform sensitive
+  test_summary_2$data$residual <- "not tested"
   expect_known_output(print(test_summary_2), "summary_DFOP_FOCUS_D_eigen.txt")
 
   test_summary_3 <- summary(f_sfo_sfo_desolve)
@@ -84,7 +68,7 @@ test_that("Summaries are reproducible", {
   # The correlation matrix is quite platform dependent
   # It differs between i386 and amd64 on Windows
   # and between Travis and my own Linux system
-  test_summary_3$Corr <- NULL
+  test_summary_3$Corr <- "Correlation matrix is platform dependent, not tested"
   expect_known_output(print(test_summary_3), "summary_DFOP_FOCUS_D_deSolve.txt")
 })
 
@@ -111,6 +95,7 @@ test_that("Plotting mkinfit and mmkin objects is reproducible", {
   plot_errmod_fit_obs_1 <- function() plot_err(fit_obs_1, sep_obs = FALSE)
   plot_errmod_fit_tc_1 <- function() plot_err(fit_tc_1, sep_obs = FALSE)
 
+  skip_if(getRversion() > 4.0)
   vdiffr::expect_doppelganger("mkinfit plot for FOCUS C with defaults", plot_default_FOCUS_C_SFO)
   vdiffr::expect_doppelganger("mkinfit plot for FOCUS C with residuals like in gmkin", plot_res_FOCUS_C_SFO)
   vdiffr::expect_doppelganger("plot_res for FOCUS C", plot_res_FOCUS_C_SFO_2)
