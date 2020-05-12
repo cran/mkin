@@ -13,15 +13,15 @@ endpoints(fit)
 }
 \value{
 A list with a matrix of dissipation times named distimes,
-  and, if applicable, a vector of formation fractions named ff
-  and, if the SFORB model was in use, a vector of eigenvalues
-  of these SFORB models, equivalent to DFOP rate constants
+and, if applicable, a vector of formation fractions named ff
+and, if the SFORB model was in use, a vector of eigenvalues
+of these SFORB models, equivalent to DFOP rate constants
 }
 \description{
 This function calculates DT50 and DT90 values as well as formation fractions
 from kinetic models fitted with mkinfit. If the SFORB model was specified
 for one of the parents or metabolites, the Eigenvalues are returned. These
-are equivalent to the rate constantes of the DFOP model, but with the
+are equivalent to the rate constants of the DFOP model, but with the
 advantage that the SFORB model can also be used for metabolites.
 }
 \note{
