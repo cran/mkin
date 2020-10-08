@@ -32,7 +32,7 @@ mkinfit(
 )
 }
 \arguments{
-\item{mkinmod}{A list of class \code{\link{mkinmod}}, containing the kinetic
+\item{mkinmod}{A list of class \link{mkinmod}, containing the kinetic
 model to be fitted to the data, or one of the shorthand names ("SFO",
 "FOMC", "DFOP", "HS", "SFORB", "IORE"). If a shorthand name is given, a
 parent only degradation model is generated for the variable with the
@@ -63,7 +63,7 @@ given below.}
 \item{state.ini}{A named vector of initial values for the state variables of
 the model. In case the observed variables are represented by more than one
 model variable, the names will differ from the names of the observed
-variables (see \code{map} component of \code{\link{mkinmod}}). The default
+variables (see \code{map} component of \link{mkinmod}). The default
 is to set the initial value of the first model variable to the mean of the
 time zero values for the variable with the maximum observed value, and all
 others to 0.  If this variable has no time zero observations, its initial
@@ -92,24 +92,22 @@ observed mean value is the new time zero.}
 \item{solution_type}{If set to "eigen", the solution of the system of
 differential equations is based on the spectral decomposition of the
 coefficient matrix in cases that this is possible. If set to "deSolve", a
-numerical ode solver from package \code{\link{deSolve}} is used. If set to
-"analytical", an analytical solution of the model is used. This is only
-implemented for simple degradation experiments with only one state
-variable, i.e. with no metabolites. The default is "auto", which uses
-"analytical" if possible, otherwise "deSolve" if a compiler is present,
-and "eigen" if no compiler is present and the model can be expressed using
-eigenvalues and eigenvectors.  This argument is passed on to the helper
-function \code{\link{mkinpredict}}.}
+numerical \link[deSolve:ode]{ode solver from package deSolve} is used. If
+set to "analytical", an analytical solution of the model is used. This is
+only implemented for relatively simple degradation models.  The default is
+"auto", which uses "analytical" if possible, otherwise "deSolve" if a
+compiler is present, and "eigen" if no compiler is present and the model
+can be expressed using eigenvalues and eigenvectors.}
 
-\item{method.ode}{The solution method passed via \code{\link{mkinpredict}}
-to \code{\link{ode}} in case the solution type is "deSolve". The default
+\item{method.ode}{The solution method passed via \code{\link[=mkinpredict]{mkinpredict()}}
+to \code{\link[deSolve:ode]{deSolve::ode()}} in case the solution type is "deSolve". The default
 "lsoda" is performant, but sometimes fails to converge.}
 
 \item{use_compiled}{If set to \code{FALSE}, no compiled version of the
-\code{\link{mkinmod}} model is used in the calls to
-\code{\link{mkinpredict}} even if a compiled version is present.}
+\link{mkinmod} model is used in the calls to \code{\link[=mkinpredict]{mkinpredict()}} even if a compiled
+version is present.}
 
-\item{control}{A list of control arguments passed to \code{\link{nlminb}}.}
+\item{control}{A list of control arguments passed to \code{\link[stats:nlminb]{stats::nlminb()}}.}
 
 \item{transform_rates}{Boolean specifying if kinetic rate constants should
 be transformed in the model specification used in the fitting for better
@@ -125,16 +123,17 @@ fitting for better compliance with the assumption of normal distribution
 of the estimator. The default (TRUE) is to do transformations. If TRUE,
 the g parameter of the DFOP and HS models are also transformed, as they
 can also be seen as compositional data. The transformation used for these
-transformations is the \code{\link{ilr}} transformation.}
+transformations is the \code{\link[=ilr]{ilr()}} transformation.}
 
 \item{quiet}{Suppress printing out the current value of the negative
 log-likelihood after each improvement?}
 
-\item{atol}{Absolute error tolerance, passed to \code{\link{ode}}. Default
-is 1e-8, lower than in \code{\link{lsoda}}.}
+\item{atol}{Absolute error tolerance, passed to \code{\link[deSolve:ode]{deSolve::ode()}}. Default
+is 1e-8, which is lower than the default in the \code{\link[deSolve:lsoda]{deSolve::lsoda()}}
+function which is used per default.}
 
-\item{rtol}{Absolute error tolerance, passed to \code{\link{ode}}. Default
-is 1e-10, much lower than in \code{\link{lsoda}}.}
+\item{rtol}{Absolute error tolerance, passed to \code{\link[deSolve:ode]{deSolve::ode()}}. Default
+is 1e-10, much lower than in \code{\link[deSolve:lsoda]{deSolve::lsoda()}}.}
 
 \item{error_model}{If the error model is "const", a constant standard
 deviation is assumed.
@@ -154,11 +153,9 @@ the error model.  If the error model is "const", unweighted nonlinear
 least squares fitting ("OLS") is selected. If the error model is "obs", or
 "tc", the "d_3" algorithm is selected.
 
-The algorithm "d_3" will directly minimize the negative log-likelihood and
-\itemize{
-\item independently - also use the three step algorithm described below. The
-fit with the higher likelihood is returned.
-}
+The algorithm "d_3" will directly minimize the negative log-likelihood
+and independently also use the three step algorithm described below.
+The fit with the higher likelihood is returned.
 
 The algorithm "direct" will directly minimize the negative log-likelihood.
 
@@ -190,17 +187,18 @@ the error model parameters in IRLS fits.}
 \item{trace_parms}{Should a trace of the parameter values be listed?}
 
 \item{\dots}{Further arguments that will be passed on to
-\code{\link{deSolve}}.}
+\code{\link[deSolve:ode]{deSolve::ode()}}.}
 }
 \value{
-A list with "mkinfit" in the class attribute.  A summary can be
-obtained by \code{\link{summary.mkinfit}}.
+A list with "mkinfit" in the class attribute.
 }
 \description{
 This function maximises the likelihood of the observed data using the Port
-algorithm \code{\link{nlminb}}, and the specified initial or fixed
+algorithm \code{\link[stats:nlminb]{stats::nlminb()}}, and the specified initial or fixed
 parameters and starting values.  In each step of the optimisation, the
-kinetic model is solved using the function \code{\link{mkinpredict}}. The
+kinetic model is solved using the function \code{\link[=mkinpredict]{mkinpredict()}}, except
+if an analytical solution is implemented, in which case the model is solved
+using the degradation function in the \link{mkinmod} object. The
 parameters of the selected error model are fitted simultaneously with the
 degradation model parameters, as both of them are arguments of the
 likelihood function.
@@ -223,61 +221,63 @@ fit <- mkinfit("FOMC", FOCUS_2006_C, quiet = TRUE)
 summary(fit)
 
 # One parent compound, one metabolite, both single first order.
+# We remove zero values from FOCUS dataset D in order to avoid warnings
+FOCUS_D <- subset(FOCUS_2006_D, value != 0)
 # Use mkinsub for convenience in model formulation. Pathway to sink included per default.
 SFO_SFO <- mkinmod(
   parent = mkinsub("SFO", "m1"),
   m1 = mkinsub("SFO"))
-# Fit the model to the FOCUS example dataset D using defaults
-print(system.time(fit <- mkinfit(SFO_SFO, FOCUS_2006_D,
-                           solution_type = "eigen", quiet = TRUE)))
-parms(fit)
-endpoints(fit)
+
+# Fit the model quietly to the FOCUS example dataset D using defaults
+fit <- mkinfit(SFO_SFO, FOCUS_D, quiet = TRUE)
+# Since mkin 0.9.50.3, we get a warning about non-normality of residuals,
+# so we try an alternative error model
+fit.tc <- mkinfit(SFO_SFO, FOCUS_D, quiet = TRUE, error_model = "tc")
+# This avoids the warning, and the likelihood ratio test confirms it is preferable
+lrtest(fit.tc, fit)
+# We can also allow for different variances of parent and metabolite as error model
+fit.obs <- mkinfit(SFO_SFO, FOCUS_D, quiet = TRUE, error_model = "obs")
+# This also avoids the warning about non-normality, but the two-component error model
+# has significantly higher likelihood
+lrtest(fit.obs, fit.tc)
+parms(fit.tc)
+endpoints(fit.tc)
+
+# We can show a quick (only one replication) benchmark for this case, as we
+# have several alternative solution methods for the model. We skip
+# uncompiled deSolve, as it is so slow. More benchmarks are found in the
+# benchmark vignette
 \dontrun{
-# deSolve is slower when no C compiler (gcc) was available during model generation
-print(system.time(fit.deSolve <- mkinfit(SFO_SFO, FOCUS_2006_D,
-                           solution_type = "deSolve")))
-parms(fit.deSolve)
-endpoints(fit.deSolve)
+if(require(rbenchmark)) {
+  benchmark(replications = 1, order = "relative", columns = c("test", "relative", "elapsed"),
+    deSolve_compiled = mkinfit(SFO_SFO, FOCUS_D, quiet = TRUE, error_model = "tc",
+      solution_type = "deSolve", use_compiled = TRUE),
+    eigen = mkinfit(SFO_SFO, FOCUS_D, quiet = TRUE, error_model = "tc",
+      solution_type = "eigen"),
+    analytical = mkinfit(SFO_SFO, FOCUS_D, quiet = TRUE, error_model = "tc",
+      solution_type = "analytical"))
+}
 }
 
-# Use stepwise fitting, using optimised parameters from parent only fit, FOMC
+# Use stepwise fitting, using optimised parameters from parent only fit, FOMC-SFO
 \dontrun{
 FOMC_SFO <- mkinmod(
   parent = mkinsub("FOMC", "m1"),
   m1 = mkinsub("SFO"))
-# Fit the model to the FOCUS example dataset D using defaults
-fit.FOMC_SFO <- mkinfit(FOMC_SFO, FOCUS_2006_D, quiet = TRUE)
-# Use starting parameters from parent only FOMC fit
-fit.FOMC = mkinfit("FOMC", FOCUS_2006_D, quiet = TRUE)
-fit.FOMC_SFO <- mkinfit(FOMC_SFO, FOCUS_2006_D, quiet = TRUE,
-  parms.ini = fit.FOMC$bparms.ode)
+fit.FOMC_SFO <- mkinfit(FOMC_SFO, FOCUS_D, quiet = TRUE)
+# Again, we get a warning and try a more sophisticated error model
+fit.FOMC_SFO.tc <- mkinfit(FOMC_SFO, FOCUS_D, quiet = TRUE, error_model = "tc")
+# This model has a higher likelihood, but not significantly so
+lrtest(fit.tc, fit.FOMC_SFO.tc)
+# Also, the missing standard error for log_beta and the t-tests for alpha
+# and beta indicate overparameterisation
+summary(fit.FOMC_SFO.tc, data = FALSE)
 
-# Use stepwise fitting, using optimised parameters from parent only fit, SFORB
-SFORB_SFO <- mkinmod(
-  parent = list(type = "SFORB", to = "m1", sink = TRUE),
-  m1 = list(type = "SFO"))
-# Fit the model to the FOCUS example dataset D using defaults
-fit.SFORB_SFO <- mkinfit(SFORB_SFO, FOCUS_2006_D, quiet = TRUE)
-fit.SFORB_SFO.deSolve <- mkinfit(SFORB_SFO, FOCUS_2006_D, solution_type = "deSolve",
-                                 quiet = TRUE)
-# Use starting parameters from parent only SFORB fit (not really needed in this case)
-fit.SFORB = mkinfit("SFORB", FOCUS_2006_D, quiet = TRUE)
-fit.SFORB_SFO <- mkinfit(SFORB_SFO, FOCUS_2006_D, parms.ini = fit.SFORB$bparms.ode, quiet = TRUE)
+# We can easily use starting parameters from the parent only fit (only for illustration)
+fit.FOMC = mkinfit("FOMC", FOCUS_2006_D, quiet = TRUE, error_model = "tc")
+fit.FOMC_SFO <- mkinfit(FOMC_SFO, FOCUS_D, quiet = TRUE,
+  parms.ini = fit.FOMC$bparms.ode, error_model = "tc")
 }
-
-\dontrun{
-# Weighted fits, including IRLS (error_model = "obs")
-SFO_SFO.ff <- mkinmod(parent = mkinsub("SFO", "m1"),
-                      m1 = mkinsub("SFO"), use_of_ff = "max")
-f.noweight <- mkinfit(SFO_SFO.ff, FOCUS_2006_D, quiet = TRUE)
-summary(f.noweight)
-f.obs <- mkinfit(SFO_SFO.ff, FOCUS_2006_D, error_model = "obs", quiet = TRUE)
-summary(f.obs)
-f.tc <- mkinfit(SFO_SFO.ff, FOCUS_2006_D, error_model = "tc", quiet = TRUE)
-summary(f.tc)
-}
-
-
 }
 \references{
 Rocke DM and Lorenzato S (1995) A two-component model
@@ -288,8 +288,7 @@ Degradation Data. \emph{Environments} 6(12) 124
 \href{https://doi.org/10.3390/environments6120124}{doi:10.3390/environments6120124}.
 }
 \seealso{
-Plotting methods \code{\link{plot.mkinfit}} and
-\code{\link{mkinparplot}}.
+\link{summary.mkinfit}, \link{plot.mkinfit}, \link{parms} and \link{lrtest}.
 
 Comparisons of models fitted to the same data can be made using
 \code{\link{AIC}} by virtue of the method \code{\link{logLik.mkinfit}}.

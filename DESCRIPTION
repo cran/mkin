@@ -1,8 +1,8 @@
 Package: mkin
 Type: Package
 Title: Kinetic Evaluation of Chemical Degradation Data
-Version: 0.9.50.2
-Date: 2020-05-12
+Version: 0.9.50.3
+Date: 2020-10-08
 Authors@R: c(person("Johannes", "Ranke", role = c("aut", "cre", "cph"),
                     email = "jranke@uni-bremen.de",
                     comment = c(ORCID = "0000-0003-4371-6538")),
@@ -17,7 +17,7 @@ Description: Calculation routines based on the FOCUS Kinetics Report (2006,
   note that no warranty is implied for correctness of results or fitness for a
   particular purpose.
 Imports: stats, graphics, methods, deSolve, R6, inline, parallel,
-        numDeriv, lmtest, pkgbuild, nlme, purrr
+        numDeriv, lmtest, pkgbuild, nlme (>= 3.1-149), purrr
 Suggests: knitr, rbenchmark, tikzDevice, testthat, rmarkdown, covr,
         vdiffr, benchmarkme, tibble, stats4
 License: GPL
@@ -26,11 +26,11 @@ LazyData: yes
 Encoding: UTF-8
 Language: en-GB
 VignetteBuilder: knitr
-BugReports: http://github.com/jranke/mkin/issues
-URL: https://pkgdown.jrwb.de/mkin
-RoxygenNote: 7.1.0
+BugReports: https://github.com/jranke/mkin/issues/
+URL: https://pkgdown.jrwb.de/mkin/
+RoxygenNote: 7.1.1
 NeedsCompilation: no
-Packaged: 2020-05-12 10:31:11 UTC; jranke
+Packaged: 2020-10-08 07:53:54 UTC; jranke
 Author: Johannes Ranke [aut, cre, cph]
     (<https://orcid.org/0000-0003-4371-6538>),
   Katrin Lindenberger [ctb],
@@ -38,4 +38,4 @@ Author: Johannes Ranke [aut, cre, cph]
   Eurofins Regulatory AG [cph]
 Maintainer: Johannes Ranke <jranke@uni-bremen.de>
 Repository: CRAN
-Date/Publication: 2020-05-12 12:20:03 UTC
+Date/Publication: 2020-10-08 08:20:02 UTC

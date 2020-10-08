@@ -7,7 +7,7 @@
 The R package **mkin** provides calculation routines for the analysis of
 chemical degradation data, including <b>m</b>ulticompartment <b>kin</b>etics as
 needed for modelling the formation and decline of transformation products, or
-if several compartments are involved.
+if several degradation compartments are involved.
 
 ## Installation
 
@@ -38,10 +38,10 @@ at the package vignettes
 
 ## Documentation
 
-The HTML documentation is available at
-[jrwb.de](https://pkgdown.jrwb.de/mkin), at
-[github](http://jranke.github.io/mkin)
-and at [R-Forge](http://kinfit.r-forge.r-project.org/mkin_static/index.html).
+The HTML documentation of the latest version released to CRAN is available at
+[jrwb.de](https://pkgdown.jrwb.de/mkin/) and
+[github](https://jranke.github.io/mkin/). Documentation of the development
+version is found in the ['dev' subdirectory](https://pkgdown.jrwb.de/mkin/dev/).
 
 ## Features
 
@@ -104,7 +104,7 @@ and at [R-Forge](http://kinfit.r-forge.r-project.org/mkin_static/index.html).
 ## GUI
 
 There is a graphical user interface that may be useful. Please
-refer to its [documentation page](http://kinfit.r-forge.r-project.org/gmkin_static)
+refer to its [documentation page](https://pkgdown.jrwb.de/gmkin/)
 for installation instructions and a manual.
 
 ## News
@@ -142,7 +142,7 @@ CRAN on 01 May 2010.
 
 The first `mkin` code was
 [published on 11 May 2010](https://r-forge.r-project.org/scm/viewvc.php?view=rev&root=kinfit&revision=8) and the
-[first CRAN version](https://cran.r-project.org/src/contrib/Archive/mkin)
+[first CRAN version](https://cran.r-project.org/src/contrib/Archive/mkin/)
 on 18 May 2010.
 
 In 2011, Bayer Crop Science started to distribute an R based successor to KinGUI named
@@ -161,7 +161,7 @@ find a zip archive of the R scripts derived from `mkin`, published under the GPL
 license.
 
 Finally, there is
-[KineticEval](http://github.com/zhenglei-gao/KineticEval), which contains
+[KineticEval](https://github.com/zhenglei-gao/KineticEval), which contains
 a further development of the scripts used for KinGUII, so the different tools
 will hopefully be able to learn from each other in the future as well.
 

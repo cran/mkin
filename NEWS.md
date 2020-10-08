@@ -1,3 +1,23 @@
+# mkin 0.9.50.3
+
+- 'parms': Add a method for mmkin objects
+
+- 'mmkin' and 'confint(method = 'profile'): Use all cores detected by parallel::detectCores() per default
+
+- 'confint(method = 'profile'): Choose accuracy based on 'rel_tol' argument, relative to the bounds obtained by the quadratic approximation
+
+- 'mkinfit': Make 'use_of_ff' = "max" also the default for models specified using short names like "SFO" or "FOMC"
+
+- 'mkinfit': Run 'stats::shapiro.test()' on standardized residuals and warn if p < 0.05
+
+- 'mkinfit': 'error_model_algorithm' = 'd_3' does not fail if direct fitting fails, but reports that the results for the threestep algorithm are returned
+
+- 'mmkin': Do not fail any more if one of the fits fails, but assign the try-error to the respective position in the mmkin object
+
+- 'mkinfit': Ignore components of state.ini that do not correspond to state variables in the model
+
+- 'endpoints': Back-calculate DT50 value from DT90 also for the biphasic models DFOP, HS and SFORB
+
 # mkin 0.9.50.2 (2020-05-12)
 
 - Increase tolerance for a platform specific test results on the Solaris test machine on CRAN
@@ -496,7 +516,7 @@
 
 # mkin 0.9-27 (2014-05-10)
 
-- Fork the GUI into a separate package [gmkin](http://github.com/jranke/gmkin)
+- Fork the GUI into a separate package [gmkin](https://github.com/jranke/gmkin)
 
 - DESCRIPTION, NAMESPACE, TODO: Adapt and add copyright information
 
