@@ -1,4 +1,34 @@
-# mkin 0.9.50.3
+# mkin 1.0.0
+
+## General
+
+- 'mkinmod' models gain arguments 'name' and 'dll_dir' which, in conjunction with a current version of the 'inline' package, make it possible to still use the DLL used for fast ODE solutions with 'deSolve' after saving and restoring the 'mkinmod' object.
+
+- 'mkindsg' R6 class for groups of 'mkinds' datasets with metadata
+
+- 'f_norm_temp_focus' generic function to normalise time intervals using the FOCUS method, with methods for numeric vectors and 'mkindsg' objects
+
+- 'D24_2014' and 'dimethenamid_2018' datasets
+
+- 'focus_soil_moisture' FOCUS default soil moisture data
+
+- 'update' method for 'mmkin' objects
+
+- 'transform_odeparms', 'backtransform_odeparms': Use logit transformation for solitary fractions like the g parameter of the DFOP model, or formation fractions for a pathway to only one target variable
+
+- 'plot.mmkin': Add a ylab argument, making it possible to customize the y axis label of the panels on the left without affecting the residual plots. Reduce legend size and vertical distance between panels
+
+- 'plot.mkinfit': Change default ylab from "Observed" to "Residue". Pass xlab to residual plot if show_residuals is TRUE.
+
+## Mixed-effects models
+
+- 'mixed.mmkin' New container for mmkin objects for plotting with the 'plot.mixed.mmkin' method
+
+- 'plot.mixed.mmkin' method used for 'nlme.mmkin' inheriting from 'mixed.mmkin' (currently virtual)
+
+- 'plot', 'summary' and 'print' methods for 'nlme.mmkin' objects
+
+# mkin 0.9.50.3 (2020-10-08)
 
 - 'parms': Add a method for mmkin objects
 
