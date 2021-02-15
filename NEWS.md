@@ -1,3 +1,11 @@
+# mkin 1.0.3
+
+- Review and update README, the 'Introduction to mkin' vignette and some of the help pages
+
+# mkin 1.0.2
+
+- 'mkinfit': Keep model names stored in 'mkinmod' objects, avoiding their loss in 'gmkin'
+
 # mkin 1.0.1
 
 - 'confint.mmkin', 'nlme.mmkin', 'transform_odeparms': Fix example code in dontrun sections that failed with current defaults
