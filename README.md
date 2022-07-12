@@ -66,7 +66,7 @@ version is found in the ['dev' subdirectory](https://pkgdown.jrwb.de/mkin/dev/).
 * The chi-squared error level as defined in the FOCUS kinetics guidance
   (see below) is calculated for each observed variable.
 * The 'variance by variable' error model which is often fitted using
-  Iteratively Reweighted Least Squares (IRLS) should now be specified as
+  Iteratively Reweighted Least Squares (IRLS) can be specified as
   `error_model = "obs"`.
 
 ### Unique in mkin
@@ -211,6 +211,10 @@ to ModelMaker 4.0, 2014-2015)
   of the visual fit in the kinetic evaluation of degradation data, 2019-2020)
 - Project Number 146839 (Checking the feasibility of using mixed-effects models for
   the derivation of kinetic modelling parameters from degradation studies, 2020-2021)
+
+Thanks are due also to Emmanuelle Comets, maintainer of the saemix package, for
+the nice collaboration on using the SAEM algorithm and its implementation in
+saemix for the evaluation of chemical degradation data.
 
 ## References
 

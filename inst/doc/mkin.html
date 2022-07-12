@@ -1303,6 +1303,8 @@ window.initializeCodeFolding = function(show) {
   // select all R code blocks
   var rCodeBlocks = $('pre.r, pre.python, pre.bash, pre.sql, pre.cpp, pre.stan, pre.julia, pre.foldable');
   rCodeBlocks.each(function() {
+    // skip if the block has fold-none class
+    if ($(this).hasClass('fold-none')) return;
 
     // create a collapsable div to wrap the code in
     var div = $('<div class="collapse r-code-collapse"></div>');
@@ -1597,7 +1599,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Introduction to mkin</h1>
 <h4 class="author">Johannes Ranke</h4>
-<h4 class="date">Last change 15 February 2021 (rebuilt 2022-03-14)</h4>
+<h4 class="date">Last change 15 February 2021 (rebuilt 2022-07-12)</h4>
 
 </div>
 
