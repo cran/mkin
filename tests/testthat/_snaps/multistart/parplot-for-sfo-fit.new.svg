@@ -26,7 +26,7 @@
 </defs>
 <g clip-path='url(#cpNTkuMDR8Njg5Ljc2fDU5LjA0fDUwMi41Ng==)'>
 <polygon points='94.08,280.80 187.52,280.80 187.52,280.79 94.08,280.79 ' style='stroke-width: 0.75; stroke: none; fill: #D3D3D3;' />
-<line x1='94.08' y1='280.79' x2='187.52' y2='280.79' style='stroke-width: 2.25; stroke-linecap: butt;' />
+<line x1='94.08' y1='280.80' x2='187.52' y2='280.80' style='stroke-width: 2.25; stroke-linecap: butt;' />
 <line x1='140.80' y1='280.80' x2='140.80' y2='280.80' style='stroke-width: 0.75; stroke-dasharray: 4.00,4.00;' />
 <line x1='140.80' y1='280.79' x2='140.80' y2='280.79' style='stroke-width: 0.75; stroke-dasharray: 4.00,4.00;' />
 <line x1='117.44' y1='280.80' x2='164.16' y2='280.80' style='stroke-width: 0.75;' />
@@ -42,27 +42,24 @@
 <polygon points='327.68,280.94 421.12,280.94 421.12,280.80 327.68,280.80 ' style='stroke-width: 0.75; stroke: none; fill: #D3D3D3;' />
 <line x1='327.68' y1='280.82' x2='421.12' y2='280.82' style='stroke-width: 2.25; stroke-linecap: butt;' />
 <line x1='374.40' y1='280.98' x2='374.40' y2='280.94' style='stroke-width: 0.75; stroke-dasharray: 4.00,4.00;' />
-<line x1='374.40' y1='280.80' x2='374.40' y2='280.80' style='stroke-width: 0.75; stroke-dasharray: 4.00,4.00;' />
+<line x1='374.40' y1='280.72' x2='374.40' y2='280.80' style='stroke-width: 0.75; stroke-dasharray: 4.00,4.00;' />
 <line x1='351.04' y1='280.98' x2='397.76' y2='280.98' style='stroke-width: 0.75;' />
-<line x1='351.04' y1='280.80' x2='397.76' y2='280.80' style='stroke-width: 0.75;' />
+<line x1='351.04' y1='280.72' x2='397.76' y2='280.72' style='stroke-width: 0.75;' />
 <polygon points='327.68,280.94 421.12,280.94 421.12,280.80 327.68,280.80 ' style='stroke-width: 0.75; fill: none;' />
-<circle cx='374.40' cy='280.60' r='2.70' style='stroke-width: 0.75;' />
 <polygon points='444.48,280.81 537.92,280.81 537.92,280.78 444.48,280.78 ' style='stroke-width: 0.75; stroke: none; fill: #D3D3D3;' />
 <line x1='444.48' y1='280.80' x2='537.92' y2='280.80' style='stroke-width: 2.25; stroke-linecap: butt;' />
-<line x1='491.20' y1='280.82' x2='491.20' y2='280.81' style='stroke-width: 0.75; stroke-dasharray: 4.00,4.00;' />
+<line x1='491.20' y1='280.84' x2='491.20' y2='280.81' style='stroke-width: 0.75; stroke-dasharray: 4.00,4.00;' />
 <line x1='491.20' y1='280.77' x2='491.20' y2='280.78' style='stroke-width: 0.75; stroke-dasharray: 4.00,4.00;' />
-<line x1='467.84' y1='280.82' x2='514.56' y2='280.82' style='stroke-width: 0.75;' />
+<line x1='467.84' y1='280.84' x2='514.56' y2='280.84' style='stroke-width: 0.75;' />
 <line x1='467.84' y1='280.77' x2='514.56' y2='280.77' style='stroke-width: 0.75;' />
 <polygon points='444.48,280.81 537.92,280.81 537.92,280.78 444.48,280.78 ' style='stroke-width: 0.75; fill: none;' />
-<circle cx='491.20' cy='280.87' r='2.70' style='stroke-width: 0.75;' />
-<polygon points='561.28,280.89 654.72,280.89 654.72,280.79 561.28,280.79 ' style='stroke-width: 0.75; stroke: none; fill: #D3D3D3;' />
-<line x1='561.28' y1='280.84' x2='654.72' y2='280.84' style='stroke-width: 2.25; stroke-linecap: butt;' />
-<line x1='608.00' y1='280.92' x2='608.00' y2='280.89' style='stroke-width: 0.75; stroke-dasharray: 4.00,4.00;' />
-<line x1='608.00' y1='280.70' x2='608.00' y2='280.79' style='stroke-width: 0.75; stroke-dasharray: 4.00,4.00;' />
-<line x1='584.64' y1='280.92' x2='631.36' y2='280.92' style='stroke-width: 0.75;' />
-<line x1='584.64' y1='280.70' x2='631.36' y2='280.70' style='stroke-width: 0.75;' />
-<polygon points='561.28,280.89 654.72,280.89 654.72,280.79 561.28,280.79 ' style='stroke-width: 0.75; fill: none;' />
-<circle cx='608.00' cy='281.12' r='2.70' style='stroke-width: 0.75;' />
+<polygon points='561.28,280.89 654.72,280.89 654.72,280.74 561.28,280.74 ' style='stroke-width: 0.75; stroke: none; fill: #D3D3D3;' />
+<line x1='561.28' y1='280.82' x2='654.72' y2='280.82' style='stroke-width: 2.25; stroke-linecap: butt;' />
+<line x1='608.00' y1='281.12' x2='608.00' y2='280.89' style='stroke-width: 0.75; stroke-dasharray: 4.00,4.00;' />
+<line x1='608.00' y1='280.68' x2='608.00' y2='280.74' style='stroke-width: 0.75; stroke-dasharray: 4.00,4.00;' />
+<line x1='584.64' y1='281.12' x2='631.36' y2='281.12' style='stroke-width: 0.75;' />
+<line x1='584.64' y1='280.68' x2='631.36' y2='280.68' style='stroke-width: 0.75;' />
+<polygon points='561.28,280.89 654.72,280.89 654.72,280.74 561.28,280.74 ' style='stroke-width: 0.75; fill: none;' />
 </g>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
 <line x1='140.80' y1='502.56' x2='608.00' y2='502.56' style='stroke-width: 0.75;' />
