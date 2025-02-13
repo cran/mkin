@@ -1,9 +1,10 @@
 # mkin
 
+<!-- badges: start -->
 [![](https://www.r-pkg.org/badges/version/mkin)](https://cran.r-project.org/package=mkin)
-[![mkin status badge](https://jranke.r-universe.dev/badges/mkin)](https://jranke.r-universe.dev/ui/#package:mkin)
-[![Build Status](https://travis-ci.com/jranke/mkin.svg?branch=main)](https://app.travis-ci.com/github/jranke/mkin)
-[![codecov](https://codecov.io/github/jranke/mkin/branch/main/graphs/badge.svg)](https://app.codecov.io/gh/jranke/mkin)
+[![mkin status badge](https://jranke.r-universe.dev/badges/mkin)](https://jranke.r-universe.dev/#package:mkin)
+[![Build Status](https://app.travis-ci.com/jranke/mkin.svg?token=Sq9VuYWyRz2FbBLxu6DK&branch=main)](https://app.travis-ci.com/jranke/mkin)
+<!-- badges: end -->
 
 The [R](https://www.r-project.org) package **mkin** provides calculation routines for the analysis of
 chemical degradation data, including <b>m</b>ulticompartment <b>kin</b>etics as
@@ -234,9 +235,21 @@ Thanks are due also to Emmanuelle Comets, maintainer of the saemix package, for
 her interest and support for using the SAEM algorithm and its implementation in
 saemix for the evaluation of chemical degradation data.
 
+Regarding the application of nonlinear mixed-effects models to degradation data,
+von Götz et al (1999) have already proposed to use this technique in the context
+of environmental risk assessments of pesticides. However, this work was
+apparently not followed up, which is why we had to independently arrive at the 
+idea and missed to cite this previous work on the topic in our first publications.
+
 ## References
 
 <table>
+  <tr><td>Ranke J (2023) Application of nonlinear hierarchical models to the 
+  kinetic evaluation of chemical degradation data - Guidance for the use
+  of an R markdown template file.
+  <a href='https://www.umweltbundesamt.de/publikationen/application-of-nonlinear-hierarchical-models-to-the'>Umweltbundesamt TEXTE 151/2023</a>
+  </td></tr>
+
   <tr><td>Ranke J, Wöltjen J, Schmidt J, and Comets E (2021)
   Taking kinetic evaluations of degradation data to the next level with nonlinear mixed-effects models.
   <i>Environments</i>
@@ -256,6 +269,13 @@ saemix for the evaluation of chemical degradation data.
   <i>Environmental Sciences Europe</i>
   <b>30</b> 17
   <a href='https://doi.org/10.1186/s12302-018-0145-1'>doi:10.1186/s12302-018-0145-1</a>
+  </td></tr>
+  
+  <tr><td>Von Götz N, Nörtersheuser P, Richter O (1999)
+  Population based analysis of pesticide kinetics
+  <i>Chemosphere</i>
+  <b>38</b> 7
+  <a href='https://doi.org/10.1016/S0045-6535(98)00388-9'>doi:10.1016/S0045-6535(98)00388-9</a>
   </td></tr>
 </table>
 

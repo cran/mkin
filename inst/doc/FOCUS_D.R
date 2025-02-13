@@ -1,4 +1,4 @@
-## ---- include = FALSE, message = FALSE----------------------------------------
+## ----include = FALSE, message = FALSE-----------------------------------------
 library(knitr)
 opts_chunk$set(tidy = FALSE, cache = FALSE)
 library(mkin)

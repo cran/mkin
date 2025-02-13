@@ -1,8 +1,8 @@
-## ---- include = FALSE---------------------------------------------------------
+## ----include = FALSE----------------------------------------------------------
 require(knitr)
 opts_chunk$set(engine='R', tidy=FALSE)
 
-## ---- echo = TRUE, cache = TRUE, fig = TRUE, fig.width = 8, fig.height = 7----
+## ----echo = TRUE, cache = TRUE, fig = TRUE, fig.width = 8, fig.height = 7-----
 library("mkin", quietly = TRUE)
 # Define the kinetic model
 m_SFO_SFO_SFO <- mkinmod(parent = mkinsub("SFO", "M1"),
